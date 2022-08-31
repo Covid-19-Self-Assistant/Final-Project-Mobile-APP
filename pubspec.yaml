@@ -33,6 +33,7 @@ dependencies:
   qr_code_scanner: ^0.4.0
   form_field_validator: ^1.1.0
   flutter_signin_button: ^2.0.0
+  hexcolor: ^2.0.7
 
 dev_dependencies:
   flutter_test:
