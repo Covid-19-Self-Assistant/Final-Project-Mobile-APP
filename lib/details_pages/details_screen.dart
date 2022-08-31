@@ -19,6 +19,7 @@ class _DetailsPageState extends State<DetailsPage> {
         color: Colors.yellowAccent,
         child: Row(
           children: [
+            
             Text("sasdfdsf"),
             Text("sasdfdsf"),
             Text("sasdfdsf"),
@@ -55,17 +56,21 @@ class _DetailsPageState extends State<DetailsPage> {
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tracker = false;
-                              symptoms = true;
-                            });
-                          },
-                          child: Text(
-                            "Tracker",
-                            style: TextStyle(
-                              fontSize: 15,
+                        child: Container(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(
+                                () {
+                                  tracker = true;
+                                  symptoms = false;
+                                },
+                              );
+                            },
+                            child: Text(
+                              "Tracker",
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
@@ -83,8 +88,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              tracker = true;
-                              symptoms = false;
+                              tracker = false;
+                              symptoms = true;
                             });
                           },
                           child: Text(
