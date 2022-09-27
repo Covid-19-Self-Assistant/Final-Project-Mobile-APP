@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "282919678133",
+    "firebase_url": "https://ctp1-35e16-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ctp1-35e16",
+    "storage_bucket": "ctp1-35e16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282919678133:android:fcc9642fc2bfeff9c90efc",
+        "android_client_info": {
+          "package_name": "com.example.dating_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282919678133-84t4lfdoa043umtvrhjck9gvp2lhluvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeP5CXGdU_reYh2yjuV_MZ0Jzi54p1n0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282919678133-84t4lfdoa043umtvrhjck9gvp2lhluvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

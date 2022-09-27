@@ -24,6 +24,8 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
       return null;
   }
 
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +51,7 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
+                    controller: _email,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -62,6 +65,7 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
                 padding: const EdgeInsets.only(
                     left: 15.0, right: 15.0, top: 15, bottom: 0),
                 child: TextFormField(
+                    controller: _password,
                     obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
