@@ -12,8 +12,8 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool tracker = false;
-    bool symptoms = true;
+    bool tracker = true;
+    bool symptoms = false;
     return Scaffold(
       bottomNavigationBar: Container(
         height: 70,
@@ -33,8 +33,8 @@ class _DetailsPageState extends State<DetailsPage> {
 
             IconButton(
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Scan()));
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (context) => Scan()));
               },
               icon: Icon(
                 Icons.health_and_safety,
@@ -85,8 +85,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              tracker = false;
-                              symptoms = true;
+                              tracker = true;
+                              symptoms = false;
                             });
                           },
                           child: Text(
@@ -110,8 +110,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              tracker = true;
-                              symptoms = false;
+                              tracker = false;
+                              symptoms = true;
                             });
                           },
                           child: Text(

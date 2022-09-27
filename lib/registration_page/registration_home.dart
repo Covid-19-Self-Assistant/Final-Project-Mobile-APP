@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/home_page/Homepage.dart';
 import 'package:dating_app/login/login_home.dart';
 import 'package:dating_app/utils/button.dart';
@@ -8,6 +9,7 @@ import 'package:dating_app/utils/labels.dart';
 import 'package:dating_app/utils/two_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme_helper.dart';
 
@@ -20,8 +22,16 @@ class RegistrationHome extends StatefulWidget {
 
 class _RegistrationHomeState extends State<RegistrationHome> {
   final _formKey = GlobalKey<FormState>();
+  var _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
   bool checkedValue = false;
+  bool showSnipper = false;
   bool checkboxValue = false;
+  // final _email = TextEditingController();
+  // final _password = TextEditingController();
+  late String _email;
+  late String _password;
+  late String username;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +71,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     child: TextFormField(
                       decoration: ThemeHelper().textInputDecoration(
                           'First Name', 'Enter your first name'),
+                      onChanged: (value) {
+                        username = value;
+                      },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
@@ -77,6 +90,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                   SizedBox(height: 20.0),
                   Container(
                     child: TextFormField(
+                      // controller: _email,
                       decoration: ThemeHelper().textInputDecoration(
                           "E-mail address", "Enter your email"),
                       keyboardType: TextInputType.emailAddress,
@@ -87,6 +101,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                           return "Enter a valid email address";
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        _email = value;
                       },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
@@ -110,6 +127,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                   SizedBox(height: 20.0),
                   Container(
                     child: TextFormField(
+                      // controller: _password,
                       obscureText: true,
                       decoration: ThemeHelper().textInputDecoration(
                           "Password*", "Enter your password"),
@@ -118,6 +136,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                           return "Please enter your password";
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        _password = value;
                       },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
@@ -210,14 +231,43 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                               ),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             // if (_formKey.currentState!.validate()) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginFormValidation()),
-                                (Route<dynamic> route) => false);
+                            // Navigator.of(context).pushAndRemoveUntil(
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             LoginFormValidation()),
+                            //     (Route<dynamic> route) => false);
+
+                            setState(() {
+                              showSnipper = true;
+                            });
+
+                            try {
+                              final newUser =
+                                  await _auth.createUserWithEmailAndPassword(
+                                email: _email,
+                                password: _password,
+                              );
+                              if (newUser != null) {
+                                _firestore.collection('users').doc(_email).set({
+                                  'First Name': username,
+                                });
+
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoginFormValidation()),
+                                    (Route<dynamic> route) => false);
+                              }
+                              setState(() {
+                                showSnipper = false;
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
                           }
+
                           // },
                           ),
                     ),
