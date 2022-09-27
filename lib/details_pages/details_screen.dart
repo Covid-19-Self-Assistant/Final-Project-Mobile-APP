@@ -1,3 +1,4 @@
+import 'package:dating_app/QR/scan.dart';
 import 'package:flutter/material.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -11,17 +12,43 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool tracker = true;
-    bool symptoms = false;
+    bool tracker = false;
+    bool symptoms = true;
     return Scaffold(
       bottomNavigationBar: Container(
-        height: 90,
-        color: Colors.yellowAccent,
+        height: 70,
+        color: Color.fromARGB(255, 20, 207, 221),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("sasdfdsf"),
-            Text("sasdfdsf"),
-            Text("sasdfdsf"),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.home),
+            ),
+
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            ),
+
+            IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Scan()));
+              },
+              icon: Icon(
+                Icons.health_and_safety,
+              ),
+            ),
+
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.person),
+            ),
+
+            // Text("sasdfdsf"),
+            // Text("sasdfdsf"),
+            // Text("sasdfdsf"),
           ],
         ),
       ),
@@ -121,8 +148,8 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   DetailsTile(
                       size: size,
-                      title: "Confirmend",
-                      count: "2,37,935",
+                      title: "Active",
+                      count: "12,935",
                       color: Color(0xff7477EC)),
                 ],
               ),
@@ -136,16 +163,16 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   DetailsTile(
                       size: size,
-                      title: "Confirmend",
-                      count: "2,37,935",
+                      title: "Reserved",
+                      count: "2,22,000",
                       color: Color(0xff7477EC)),
                   SizedBox(
                     width: 15,
                   ),
                   DetailsTile(
                       size: size,
-                      title: "Confirmend",
-                      count: "2,37,935",
+                      title: "Deceases",
+                      count: "37,892",
                       color: Color(0xff7477EC)),
                 ],
               ),

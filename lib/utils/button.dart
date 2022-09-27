@@ -16,6 +16,7 @@ class Button {
           onPrimary: Colors.white,
           primary: Colors.redAccent[400],
           padding: EdgeInsets.all(20.0),
+          
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0))),
     );

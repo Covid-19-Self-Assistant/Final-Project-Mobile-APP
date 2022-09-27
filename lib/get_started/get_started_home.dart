@@ -61,7 +61,7 @@ class _GetStartedHomeState extends State<GetStartedHome> {
                 ),
                 Container(
                   width: size.width,
-                  child: Button.RoseButton(context, "Get Started", LoginHome()),
+                  child: Button.RoseButton(context, "Get Started", LoginFormValidation()),
                 ),
               ],
             ),
