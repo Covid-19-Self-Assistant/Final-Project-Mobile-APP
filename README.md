@@ -1,4 +1,4 @@
-# dating_app
+# Automated Contact Tracing App
 
 A new Flutter project.
 
