@@ -32,6 +32,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   late String _email;
   late String _password;
   late String username;
+  TextEditingController _date = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,46 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(height: 20.0),
+
+                  //Birthday
+                  Container(
+                    child: TextFormField(
+                      controller: _date,
+                      decoration: ThemeHelper().textInputDecoration(
+                          'BirthDay', 'Enter your BirthDay'),
+                      onTap: () async {
+                        DateTime? pickeddate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickeddate != null) {
+                          setState(() {
+                            _date.text =
+                                DateFormat('yyy - MM - dd').format(pickeddate);
+                          });
+                        }
+                      },
+                    ),
+                    decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+
+                  //Blood Group
+                  Container(
+                    child: TextFormField(
+                      decoration: ThemeHelper().textInputDecoration(
+                          'Blood Group', 'Enter your Blood Group'),
+                    ),
+                    decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+
                   Container(
                     child: TextFormField(
                       // controller: _password,
@@ -144,6 +185,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(height: 15.0),
+
                   FormField<bool>(
                     builder: (state) {
                       return Column(
@@ -370,3 +412,5 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   // ignore: non_constant_identifier_names
   FaIcon(googlePlus, {required int size, required Color colors}) {}
 }
+
+DateFormat(String s) {}
