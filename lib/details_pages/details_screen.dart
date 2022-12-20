@@ -90,6 +90,13 @@ class _DetailsPageState extends State<DetailsPage> {
 
                 IconButton(
                   onPressed: () {
+                    Navigator.pushNamed(context, '/qrScanner');
+                  },
+                  icon: Icon(Icons.qr_code),
+                ),
+
+                IconButton(
+                  onPressed: () {
                     // Navigator.of(context)
                     //     .push(MaterialPageRoute(builder: (context) => Scan()));
                   },

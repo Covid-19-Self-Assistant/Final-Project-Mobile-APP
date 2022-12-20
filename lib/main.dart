@@ -1,3 +1,4 @@
+import 'package:dating_app/QR/qr_scanner.dart';
 import 'package:dating_app/splash_screen/splash_screen.dart';
 import 'package:dating_app/symptoms%20screen/symptoms.dart';
 import 'package:dating_app/tracing_controller/nearbyInterface.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/nearByInt': (context) => NearbyInterface(),
         '/symptoms': (context) => SpreadScreen(),
+        '/qrScanner': (context) => MyHomePage(
+              title: 'QR Scanner',
+            ),
       },
     );
   }
