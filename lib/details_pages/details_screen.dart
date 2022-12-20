@@ -1,4 +1,5 @@
 import 'package:dating_app/QR/scan.dart';
+import 'package:dating_app/tracing_controller/nearbyInterface.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -81,7 +82,9 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
 
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/nearByInt');
+                  },
                   icon: Icon(Icons.search),
                 ),
 

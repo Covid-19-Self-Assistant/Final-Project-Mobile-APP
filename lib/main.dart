@@ -1,4 +1,5 @@
 import 'package:dating_app/splash_screen/splash_screen.dart';
+import 'package:dating_app/tracing_controller/nearbyInterface.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SplashScreen(),
+      routes: {
+        '/nearByInt': (context) => NearbyInterface(),
+      },
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/components/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
