@@ -43,6 +43,7 @@ dependencies:
   firebase_database: ^9.1.4
   modal_progress_hud_nsn: ^0.3.0
   file_picker: ^5.0.1
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
