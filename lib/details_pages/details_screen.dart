@@ -168,12 +168,13 @@ class _DetailsPageState extends State<DetailsPage> {
                           child: Center(
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  tracker = false;
-                                  symptoms = true;
-                                  trackerColor = Colors.amber;
-                                  symptomsColor = Colors.white;
-                                });
+                                // setState(() {
+                                //   tracker = false;
+                                //   symptoms = true;
+                                //   trackerColor = Colors.amber;
+                                //   symptomsColor = Colors.white;
+                                // });
+                                Navigator.pushNamed(context, '/symptoms');
                               },
                               child: Text(
                                 "Symptoms",
