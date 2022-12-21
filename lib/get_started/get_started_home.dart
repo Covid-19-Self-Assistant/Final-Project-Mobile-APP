@@ -14,66 +14,60 @@ class _GetStartedHomeState extends State<GetStartedHome> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: LayoutBuilder(builder: (context, constraint ){
-        return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(
-                top: size.height / 12,
-                left: size.width / 15,
-                bottom: size.width / 15,
-              ),
-              child: Image.asset("assets/images/people.png"),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(
+              top: size.height / 12,
+              left: size.width / 15,
+              bottom: size.width / 15,
             ),
-            SizedBox(
-              height: 5,
+            child: Image.asset("assets/images/people.png"),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              left: size.width / 15,
+              right: size.width / 15,
+              bottom: size.width / 15,
             ),
-            Container(
-              margin: EdgeInsets.only(
-                left: size.width / 15,
-                right: size.width / 15,
-                bottom: size.width / 15,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: size.width,
-                    child: Text(
-                      "Let’s get Health assistant ☺",
-                      style: TextStyle(fontSize: 20),
+            child: Column(
+              children: [
+                Container(
+                  width: size.width,
+                  child: Text(
+                    "Let’s get Health assistant ☺",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  width: size.width,
+                  child: Text(
+                    "The best option to protect yourself.",
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    width: size.width,
-                    child: Text(
-                      "The best option to protect yourself.",
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height / 10,
-                  ),
-                  Container(
-                    width: size.width,
-                    child: Button.RoseButton(context, "Get Started", LoginFormValidation()),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      );
-      }),
-      
-      
+                ),
+                SizedBox(
+                  height: size.height / 10,
+                ),
+                Container(
+                  width: size.width,
+                  child: Button.RoseButton(context, "Get Started", LoginFormValidation()),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
