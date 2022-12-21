@@ -97,6 +97,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
                 IconButton(
                   onPressed: () {
+                    Navigator.pushNamed(context, '/stateChange');
                     // Navigator.of(context)
                     //     .push(MaterialPageRoute(builder: (context) => Scan()));
                   },
@@ -228,26 +229,26 @@ class _DetailsPageState extends State<DetailsPage> {
                             },
                           ),
                         ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 20, right: 20),
+                        //   child: Text(
+                        //     "State",
+                        //     style: TextStyle(
+                        //       fontSize: 14,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 20, right: 20),
+                        //   child: Text(
+                        //     "City",
+                        //     style: TextStyle(
+                        //       fontSize: 14,
+                        //     ),
+                        //   ),
+                        // ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Text(
-                            "State",
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Text(
-                            "City",
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          padding: const EdgeInsets.only(left: 20, right: 200),
                           child: GestureDetector(
                             child: Text(
                               "Worldwide",

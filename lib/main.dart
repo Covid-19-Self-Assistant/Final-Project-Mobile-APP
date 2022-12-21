@@ -2,6 +2,7 @@ import 'package:dating_app/QR/qr_scanner.dart';
 import 'package:dating_app/splash_screen/splash_screen.dart';
 import 'package:dating_app/symptoms%20screen/symptoms.dart';
 import 'package:dating_app/tracing_controller/nearbyInterface.dart';
+import 'package:dating_app/update_positive/updateStatus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         '/symptoms': (context) => SpreadScreen(),
         '/qrScanner': (context) => MyHomePage(
               title: 'QR Scanner',
+            ),
+        '/stateChange': (context) => StateChanger(
+              title: 'Change Your State',
             ),
       },
     );
