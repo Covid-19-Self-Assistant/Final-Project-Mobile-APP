@@ -28,42 +28,49 @@ class _GetStartedHomeState extends State<GetStartedHome> {
           SizedBox(
             height: 5,
           ),
-          Container(
-            margin: EdgeInsets.only(
-              left: size.width / 15,
-              right: size.width / 15,
-              bottom: size.width / 15,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: size.width,
-                  child: Text(
-                    "Let’s get Health assistant ☺",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  width: size.width,
-                  child: Text(
-                    "The best option to protect yourself.",
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w700,
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.only(
+                left: size.width / 15,
+                right: size.width / 15,
+                bottom: size.width / 15,
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: size.width,
+                    child: Center(
+                      child: Text(
+                        "Let’s get Health assistant ☺",
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: size.height / 10,
-                ),
-                Container(
-                  width: size.width,
-                  child: Button.RoseButton(context, "Get Started", LoginFormValidation()),
-                ),
-              ],
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    width: size.width,
+                    child: Text(
+                      "The best option to protect yourself.",
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height / 12,
+                  ),
+                  Flexible(
+                    child: Container(
+                      width: size.width,
+                      child: Button.RoseButton(
+                          context, "Get Started", LoginFormValidation()),
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         ],
