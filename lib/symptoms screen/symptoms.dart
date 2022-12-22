@@ -60,7 +60,7 @@ class SpreadScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const Text('Self Check Up >'),
+                        child: const Text('Self Check >'),
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(

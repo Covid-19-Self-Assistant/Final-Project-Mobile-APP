@@ -37,47 +37,49 @@ class TestCovid extends StatelessWidget {
                 SizedBox(
                   width: 40,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      "Self Check Up \nFor Covid-19.",
-                      style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white60),
-                    ),
-                    SizedBox(
-                      height: 30.0,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SpreadScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text('< How to Prevent'),
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.blueGrey),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        "Self Check Up For Covid-19.",
+                        style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60),
+                      ),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SpreadScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('< Prevent'),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.blueGrey),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Image(
                   image: AssetImage(
-                    "assets/images/doctor.png",
+                    "assets/images/testcovid.png",
                   ),
                   fit: BoxFit.fitHeight,
                   alignment: Alignment.bottomRight,
@@ -100,12 +102,11 @@ class TestCovid extends StatelessWidget {
           height: 10,
         ),
         Container(
-          //image:AssetImage("")
           margin: EdgeInsets.symmetric(
-            horizontal: 20,
+            horizontal: 25,
             vertical: 10,
           ),
-          height: 360,
+          height: 260,
           width: double.infinity,
           decoration: BoxDecoration(
               image: DecorationImage(
@@ -193,7 +194,7 @@ class TestCovid extends StatelessWidget {
             horizontal: 20,
             vertical: 10,
           ),
-          height: 140,
+          height: 250,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -212,11 +213,12 @@ class TestCovid extends StatelessWidget {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Text(
                       "Are you vaccined or not?",
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ),
                   ElevatedButton(
@@ -239,16 +241,21 @@ class TestCovid extends StatelessWidget {
                   )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  "    If you didn't vaccined yet, You have risk of Covid-19 ",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent),
-                ),
+              Row(
+                children: [
+                  Image(image: AssetImage("assets/images/vaccine.png")),
+                  Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: Text(
+                      "    If you didn't vaccined yet ,\n   You have risk of Covid-19 ",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
