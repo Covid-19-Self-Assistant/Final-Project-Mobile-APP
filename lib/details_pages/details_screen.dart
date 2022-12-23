@@ -1,5 +1,3 @@
-import 'package:dating_app/QR/scan.dart';
-import 'package:dating_app/tracing_controller/nearbyInterface.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +17,14 @@ class _DetailsPageState extends State<DetailsPage> {
   String active = '';
   String recovered = '';
   String death = '';
+  late Future<dynamic> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getHttp();
+  }
+
   Future getHttp() async {
     try {
       var response = await Dio()
@@ -59,15 +65,21 @@ class _DetailsPageState extends State<DetailsPage> {
     bool symptoms = false;
     Color trackerColor = Colors.white;
     Color symptomsColor = Colors.amber;
-    getHttp();
     return FutureBuilder(
-      future: getHttp(),
+      
+      future: _future,
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
         if (snapshot.error != null) {
           return Text("Something went wrong");
+        }
+        if (isLocal) {
+          conform = localData['local_total_cases'].toString();
+          active = localData['local_active_cases'].toString();
+          recovered = localData['local_recovered'].toString();
+          death = localData['local_deaths'].toString();
         }
         return Scaffold(
           bottomNavigationBar: Container(
@@ -85,7 +97,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/nearByInt');
                   },
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.connect_without_contact_sharp),
                 ),
 
                 IconButton(
@@ -107,7 +119,9 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
 
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/profile');
+                  },
                   icon: Icon(Icons.person),
                 ),
 

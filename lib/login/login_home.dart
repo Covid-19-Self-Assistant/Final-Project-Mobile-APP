@@ -2,6 +2,7 @@ import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:dating_app/registration_page/registration_home.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'HomePage.dart';
 
@@ -28,6 +29,9 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
   final _password = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -98,8 +102,11 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
                     color: Colors.redAccent[400],
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formkey.currentState!.validate()) {
+                      final SharedPreferences prefs = await _prefs;
+                      prefs.setBool("isLogin", true);
+
                       Navigator.push(context,
                           MaterialPageRoute(builder: (_) => DetailsPage()));
                       print("Validated");

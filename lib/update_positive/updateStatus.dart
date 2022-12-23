@@ -60,7 +60,7 @@ class _StateChangerState extends State<StateChanger> {
           // ),
           Expanded(
             child:
-                buildHeader(text: 'Change Your State', child: buildIOSSwitch()),
+                buildHeader(text: value == true ? 'Covid Positive' : 'Covid Negative', child: buildIOSSwitch()),
           ),
         ],
       );
