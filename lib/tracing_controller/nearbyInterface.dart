@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/components/constants.dart';
+import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:nearby_connections/nearby_connections.dart';
-
 import '../components/contact_card.dart';
 
 class NearbyInterface extends StatefulWidget {
@@ -150,9 +150,12 @@ class _NearbyInterfaceState extends State<NearbyInterface> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: Colors.deepPurple[800],
+        leading: BackButton(
+          color: Colors.deepPurple,
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => DetailsPage()));
+          },
         ),
         centerTitle: true,
         title: Text(
@@ -229,7 +232,7 @@ class _NearbyInterfaceState extends State<NearbyInterface> {
                   bool a = await Nearby().startAdvertising(
                     loggedInUser.email.toString(),
                     strategy,
-                    onConnectionInitiated: null,
+                    onConnectionInitiated: (type, ctx) {},
                     onConnectionResult: (id, status) {
                       print(status);
                     },

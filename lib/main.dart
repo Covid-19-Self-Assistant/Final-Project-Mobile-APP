@@ -1,7 +1,11 @@
 import 'package:dating_app/QR/qr_scanner.dart';
+import 'package:dating_app/details_pages/details_screen.dart';
+import 'package:dating_app/login/login_home.dart';
+import 'package:dating_app/profile_page/ProfilePage.dart';
+import 'package:dating_app/profile_page/ConnectedUsers.dart';
 import 'package:dating_app/splash_screen/splash_screen.dart';
 import 'package:dating_app/symptoms%20screen/symptoms.dart';
-import 'package:dating_app/tracing_controller/nearbyInterface.dart';
+import 'package:dating_app/tracing_controller/ShowDevices.dart';
 import 'package:dating_app/update_positive/updateStatus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +28,12 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
       routes: {
-        '/nearByInt': (context) => NearbyInterface(),
+        '/details': (context) => DetailsPage(),
+        '/login': (context) => LoginFormValidation(),
+        '/nearByInt': (context) => ShowDevices(),
         '/symptoms': (context) => SpreadScreen(),
+        '/profile': (context) => ProfilePage(),
+        '/usersList': (context) => ConnectedUsers(),
         '/qrScanner': (context) => MyHomePage(
               title: 'QR Scanner',
             ),

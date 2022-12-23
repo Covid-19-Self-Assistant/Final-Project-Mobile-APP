@@ -1,6 +1,7 @@
 import 'package:dating_app/login/login_home.dart';
 import 'package:dating_app/utils/button.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStartedHome extends StatefulWidget {
   const GetStartedHome({Key? key}) : super(key: key);
@@ -10,6 +11,22 @@ class GetStartedHome extends StatefulWidget {
 }
 
 class _GetStartedHomeState extends State<GetStartedHome> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  autoLogin() async {
+    final SharedPreferences prefs = await _prefs;
+    var isLogin = prefs.getBool("isLogin");
+    if (isLogin == true) {
+      Navigator.pushNamed(context, '/details');
+    }
+  }
+
+  @override
+  void initState() {
+    autoLogin();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
