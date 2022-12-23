@@ -199,8 +199,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     child: Text('Device Infor'),
                   ),
 
-                  Container(
+                  if(_deviceInfo.text != "") Container(
                     child: TextFormField(
+                      enabled: false,
                       controller: _deviceInfo,
                       decoration: ThemeHelper().textInputDecoration(
                           "Device Infor*", "Enter your device infor"),

@@ -77,32 +77,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+                SizedBox(height: 20),
                 Container(
-                  margin: EdgeInsets.only(top: 20, left: 20, bottom: 5),
-                  height: 20,
                   width: double.infinity,
-                  child: Text(
-                    "Connectivity Details",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey,
+                  height: 50,
+                  child: MaterialButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/connectivityDetails");
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Connectivity Details',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
 
-                // days list
-                ...connections
-                    .map(((e) => InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/usersList');
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text(e.day.toString()),
-                            ),
-                          ),
-                        )))
-                    .toList(),
+                
               ],
             );
           },

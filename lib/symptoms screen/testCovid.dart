@@ -168,15 +168,18 @@ class TestCovid extends StatelessWidget {
                   //     style: TextStyle(fontSize: 20),
                   //   ),
                   // ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "    If you have bellow symptoms you are at a risk of Covid-19 ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                  Expanded(
+                    child: Container(
+                      color: Colors.black12,
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        "    If you have bellow symptoms you are at a risk of Covid-19. ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
                     ),
                   ),
                 ],
@@ -221,20 +224,26 @@ class TestCovid extends StatelessWidget {
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const VaccineStatus(),
-                        ),
-                      );
-                    },
-                    child: const Text('Vaccine Details >'),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.blueGrey),
+                  Expanded(
+                    
+                    child: Container(
+                      margin: EdgeInsets.all(2),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const VaccineStatus(),
+                            ),
+                          );
+                        },
+                        child: const Text('Vaccine Details >'),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.blueGrey),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -244,15 +253,17 @@ class TestCovid extends StatelessWidget {
               Row(
                 children: [
                   Image(image: AssetImage("assets/images/vaccine.png")),
-                  Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: Text(
-                      "    If you didn't vaccined yet ,\n   You have risk of Covid-19 ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.redAccent),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text(
+                        "    If you didn't vaccined yet ,\n   You have risk of Covid-19.  ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent),
+                      ),
                     ),
                   ),
                 ],
