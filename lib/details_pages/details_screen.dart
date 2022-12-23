@@ -152,56 +152,52 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                     child: Row(
                       children: [
-                        Container(
-                          width: size.width * 0.44,
-                          height: 35,
-                          margin: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                            color: trackerColor,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  tracker = true;
-                                  symptoms = false;
-                                  trackerColor = Colors.pink;
-                                  symptomsColor = Colors.amber;
-                                });
-                              },
-                              child: Text(
-                                "Tracker",
-                                style: TextStyle(
-                                  fontSize: 15,
+                        Expanded(
+                          child: Container(
+                            height: 35,
+                            margin: EdgeInsets.only(left: 10),
+                            decoration: BoxDecoration(
+                              color: trackerColor,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    tracker = true;
+                                    symptoms = false;
+                                    trackerColor = Colors.pink;
+                                    symptomsColor = Colors.amber;
+                                  });
+                                },
+                                child: Text(
+                                  "Tracker",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          width: size.width * 0.44,
-                          height: 35,
-                          margin: EdgeInsets.only(left: 10, right: 10),
-                          decoration: BoxDecoration(
-                            color: symptomsColor,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                // setState(() {
-                                //   tracker = false;
-                                //   symptoms = true;
-                                //   trackerColor = Colors.amber;
-                                //   symptomsColor = Colors.white;
-                                // });
-                                Navigator.pushNamed(context, '/symptoms');
-                              },
-                              child: Text(
-                                "Symptoms",
-                                style: TextStyle(
-                                  fontSize: 15,
+                        Expanded(
+                          child: Container(
+                            height: 35,
+                            margin: EdgeInsets.only(left: 10, right: 10),
+                            decoration: BoxDecoration(
+                              color: symptomsColor,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/symptoms');
+                                },
+                                child: Text(
+                                  "Symptoms",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ),
@@ -217,9 +213,10 @@ class _DetailsPageState extends State<DetailsPage> {
                 Container(
                     width: double.infinity,
                     height: 20,
-                    child: Row(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: [
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           child: GestureDetector(
                             child: Text(
@@ -243,25 +240,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             },
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 20, right: 20),
-                        //   child: Text(
-                        //     "State",
-                        //     style: TextStyle(
-                        //       fontSize: 14,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 20, right: 20),
-                        //   child: Text(
-                        //     "City",
-                        //     style: TextStyle(
-                        //       fontSize: 14,
-                        //     ),
-                        //   ),
-                        // ),
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.only(left: 20, right: 200),
                           child: GestureDetector(
                             child: Text(
