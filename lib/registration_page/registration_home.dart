@@ -1,14 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dating_app/home_page/Homepage.dart';
 import 'package:dating_app/login/login_home.dart';
-import 'package:dating_app/utils/button.dart';
-import 'package:dating_app/utils/dividerl_line.dart';
-import 'package:dating_app/utils/footer_text.dart';
-import 'package:dating_app/utils/input_box.dart';
-import 'package:dating_app/utils/labels.dart';
-import 'package:dating_app/utils/two_icon_button.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme_helper.dart';
@@ -27,12 +20,23 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   bool checkedValue = false;
   bool showSnipper = false;
   bool checkboxValue = false;
-  // final _email = TextEditingController();
-  // final _password = TextEditingController();
   late String _email;
   late String _password;
+  late TextEditingController _deviceInfo = TextEditingController();
   late String username;
   TextEditingController _date = TextEditingController();
+
+  //
+
+  final deviceInfoPlugin = DeviceInfoPlugin();
+
+  void _getDeviceInformations() async {
+    final deviceInfo = await deviceInfoPlugin.deviceInfo;
+    final allInfo = deviceInfo.data;
+    setState(() {
+      _deviceInfo.text = allInfo['device'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,10 +144,15 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2101),
                         );
+
                         if (pickeddate != null) {
+                          var year = pickeddate.year;
+                          var month = pickeddate.month;
+                          var day = pickeddate.day;
+                          var date = '$year/$month/$day';
                           setState(() {
-                            _date.text =
-                                DateFormat('yyy - MM - dd').format(pickeddate);
+                            print(pickeddate);
+                            _date.text = date;
                           });
                         }
                       },
@@ -185,6 +194,26 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(height: 15.0),
+                  MaterialButton(
+                    onPressed: _getDeviceInformations,
+                    child: Text('Device Infor'),
+                  ),
+
+                  Container(
+                    child: TextFormField(
+                      controller: _deviceInfo,
+                      decoration: ThemeHelper().textInputDecoration(
+                          "Device Infor*", "Enter your device infor"),
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "Please enter your device infor";
+                        }
+                        return null;
+                      },
+                      onChanged: null,
+                    ),
+                    decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                  ),
 
                   FormField<bool>(
                     builder: (state) {
@@ -228,32 +257,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                       }
                     },
                   ),
-
-                  // Labels.inputlabels("Enter your Email"),
-                  // InputBox.UserInput(false),
-                  // Labels.inputlabels("Enter your mobile number"),
-                  // InputBox.UserInput(false),
-                  // Labels.inputlabels("Enter your Password"),
-                  // InputBox.UserInput(true),
                   SizedBox(
                     height: size.height / 70,
                   ),
-                  // Container(
-                  //   width: size.width,
-                  //   child: Button.RoseButton(context, "Register", HomePage()),
-                  // ),
-                  // SizedBox(
-                  //   height: size.height / 40,
-                  // ),
-                  // Container(child: DividerLine.DividerOr(size)),
-                  // SizedBox(
-                  //   height: size.height / 40,
-                  // ),
-                  // TwoIconButton.iconbuton(size),
-                  // SizedBox(
-                  //   height: size.height / 40,
-                  // ),
-                  // FooterText.FotterMessage()
                   Center(
                     child: Container(
                       // decoration: ThemeHelper().buttonBoxDecoration(context),
@@ -274,13 +280,6 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                             ),
                           ),
                           onPressed: () async {
-                            // if (_formKey.currentState!.validate()) {
-                            // Navigator.of(context).pushAndRemoveUntil(
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             LoginFormValidation()),
-                            //     (Route<dynamic> route) => false);
-
                             setState(() {
                               showSnipper = true;
                             });
@@ -315,89 +314,6 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     ),
                   ),
                   SizedBox(height: 30.0),
-                  // Text(
-                  //   "Or create account using social media",
-                  //   style: TextStyle(color: Colors.grey),
-                  // ),
-                  // SizedBox(height: 25.0),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     GestureDetector(
-                  //       child: FaIcon(
-                  //         FontAwesomeIcons.googlePlus,
-                  //         size: 35,
-                  //         colors: Color(0xEC2D2F),
-                  //       ),
-                  //       onTap: () {
-                  //         setState(() {
-                  //           showDialog(
-                  //             context: context,
-                  //             builder: (BuildContext context) {
-                  //               return ThemeHelper().alartDialog(
-                  //                   "Google Plus",
-                  //                   "You tap on GooglePlus social icon.",
-                  //                   context);
-                  //             },
-                  //           );
-                  //         });
-                  //       },
-                  //     ),
-                  // SizedBox(
-                  //   width: 30.0,
-                  // ),
-                  // GestureDetector(
-                  //   child: Container(
-                  //     padding: EdgeInsets.all(0),
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(100),
-                  //       border: Border.all(
-                  //         width: 5,
-                  //         color: Color(0x40ABF0),
-                  //       ),
-                  //       color: Color(0x40ABF0),
-                  //     ),
-                  //     child: FaIcon(
-                  //       FontAwesomeIcons.twitter,
-                  //       size: 23,
-                  //       colors: Color(0xFFFFFF),
-                  //     ),
-                  //   ),
-                  //   onTap: () {
-                  //     setState(() {
-                  //       showDialog(
-                  //         context: context,
-                  //         builder: (BuildContext context) {
-                  //           return ThemeHelper().alartDialog("Twitter",
-                  //               "You tap on Twitter social icon.", context);
-                  //         },
-                  //       );
-                  //     });
-                  //   },
-                  // ),
-                  // SizedBox(
-                  //   width: 30.0,
-                  // ),
-                  // GestureDetector(
-                  //   child: FaIcon(
-                  //     FontAwesomeIcons.facebook,
-                  //     size: 35,
-                  //     colors: Color(0x3E529C),
-                  //   ),
-                  //   onTap: () {
-                  //     setState(() {
-                  //       showDialog(
-                  //         context: context,
-                  //         builder: (BuildContext context) {
-                  //           return ThemeHelper().alartDialog(
-                  //               "Facebook",
-                  //               "You tap on Facebook social icon.",
-                  //               context);
-                  //         },
-                  //       );
-                  //     });
-                  //   },
-                  // ),
                 ],
               ),
               // ],
@@ -412,5 +328,3 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   // ignore: non_constant_identifier_names
   FaIcon(googlePlus, {required int size, required Color colors}) {}
 }
-
-DateFormat(String s) {}
