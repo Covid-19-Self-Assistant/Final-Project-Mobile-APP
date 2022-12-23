@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:dating_app/profile_page/PickImageFromGalleryOrCamera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -14,7 +18,37 @@ class _ProfilePageState extends State<ProfilePage> {
     Connection(day: "2022-12-23"),
     Connection(day: "2022-12-24"),
   ];
+  bool profileLoading = false;
+  final picker = ImagePicker();
+  late XFile? pickedFile;
+  bool isImagesPicked = false;
+
   // TODO: get the profile details from the api
+
+  Future saveImage(context) async {
+    try {
+      XFile? _image =
+          await PickImageFromGalleryOrCamera.getProfileImage(context, picker);
+
+      if (_image!.path != "") {
+        setState(() {
+          isImagesPicked = true;
+          profileLoading = true;
+          pickedFile = _image;
+        });
+      } else {
+        print('No image');
+      }
+
+      setState(() {
+        profileLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        profileLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +60,16 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 SizedBox(height: 20),
                 Container(
-                  height: 200,
-                  width: 200,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(
-                      'assets/images/doctor.png',
-                    ),
-                  ),
-                ),
+                    height: 200,
+                    width: 200,
+                    child: isImagesPicked == false
+                        ? CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/images/doctor.png'),
+                          )
+                        : Container(
+                            child: Image.file(File(pickedFile!.path)),
+                          )),
                 SizedBox(height: 20),
                 Text(
                   'Angela Yu',
@@ -41,6 +77,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                SizedBox(height: 10),
+                MaterialButton(
+                  onPressed: () => saveImage(context),
+                  child: Icon(Icons.cloud_upload),
                 ),
                 SizedBox(height: 10),
                 Text(
@@ -60,7 +101,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   child: Text("Log out"),
                 ),
-
                 SizedBox(height: 20),
                 Container(
                   width: double.infinity,
@@ -95,8 +135,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-
-                
               ],
             );
           },
