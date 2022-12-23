@@ -1,4 +1,6 @@
 import 'package:dating_app/QR/qr_scanner.dart';
+import 'package:dating_app/details_pages/details_screen.dart';
+import 'package:dating_app/login/login_home.dart';
 import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:dating_app/profile_page/ConnectedUsers.dart';
 import 'package:dating_app/splash_screen/splash_screen.dart';
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
       routes: {
+        '/details': (context) => DetailsPage(),
+        '/login': (context) => LoginFormValidation(),
         '/nearByInt': (context) => ShowDevices(),
         '/symptoms': (context) => SpreadScreen(),
         '/profile': (context) => ProfilePage(),

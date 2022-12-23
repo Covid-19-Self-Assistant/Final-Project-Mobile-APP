@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -49,7 +50,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.grey,
                   ),
                 ),
-                SizedBox(height: 20),
+                MaterialButton(
+                  onPressed: () async {
+                    final Future<SharedPreferences> _prefs =
+                        SharedPreferences.getInstance();
+                    final SharedPreferences prefs = await _prefs;
+                    prefs.remove("isLogin");
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child: Text("Log out"),
+                ),
+
                 SizedBox(height: 20),
                 Container(
                   width: double.infinity,

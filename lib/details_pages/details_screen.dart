@@ -17,6 +17,13 @@ class _DetailsPageState extends State<DetailsPage> {
   String active = '';
   String recovered = '';
   String death = '';
+  late Future<dynamic> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getHttp();
+  }
 
   Future getHttp() async {
     try {
@@ -59,7 +66,8 @@ class _DetailsPageState extends State<DetailsPage> {
     Color trackerColor = Colors.white;
     Color symptomsColor = Colors.amber;
     return FutureBuilder(
-      future: getHttp(),
+      
+      future: _future,
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());

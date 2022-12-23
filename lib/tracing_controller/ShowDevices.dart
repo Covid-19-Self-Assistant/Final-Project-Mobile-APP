@@ -18,11 +18,8 @@ class _ShowDevicesState extends State<ShowDevices> {
     _devices.clear();
     FlutterBluetoothSerial.instance.startDiscovery().listen((value) {
       // Update the list of Bluetooth map
-      print(value);
       setState(() {
-        if (_devices.contains((device) => device != value)) {
-          _devices.add(value);
-        }
+        _devices.add(value);
       });
     });
   }
@@ -148,12 +145,14 @@ class _ShowDevicesState extends State<ShowDevices> {
               child: ListView.builder(
                 itemCount: _devices.length,
                 itemBuilder: ((context, index) {
-                  return ListTile(
-                    title: Text(_devices[index].device.name.toString()),
-                    subtitle: Text(_devices[index].device.address.toString()),
-                    trailing: IconButton(
-                      icon: Icon(Icons.sync),
-                      onPressed: _syncDialogModal,
+                  return Card(
+                    child: ListTile(
+                      title: Text(_devices[index].device.name.toString()),
+                      subtitle: Text(_devices[index].device.address.toString()),
+                      trailing: IconButton(
+                        icon: Icon(Icons.sync),
+                        onPressed: _syncDialogModal,
+                      ),
                     ),
                   );
                 }),

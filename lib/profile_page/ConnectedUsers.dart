@@ -21,8 +21,8 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
   bool type = false;
   String messageForNoUsersSelected = 'Sorry No users have been selected ?';
   String messageWhenUsersAreSelected =
-      'Do you want to send emails for all users ?';
-  String actionButtonText = 'Send Email For Selected Users';
+      'Do you want to send emails for all user(s) ?';
+  String actionButtonText = 'Send Email For Selected User(s)';
   // end of the variables
 
   // functions =========>
@@ -100,6 +100,11 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
     setState(() {
       userStatus[index].selectedStatus = value;
       if (value == true) {
+        if(_selectedUsesEmails.length == userStatus.length - 1){
+          setState(() {
+            isSelectAll = true;
+          });
+        }
         _selectedUsesEmails.add(userStatus[index].email);
       } else {
         setState(() {
