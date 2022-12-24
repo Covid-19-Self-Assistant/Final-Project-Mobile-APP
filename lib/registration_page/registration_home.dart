@@ -308,7 +308,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                                   'email': _email.text,
                                   'mobile': mobile.text,
                                   'birthDay': birthday.text,
-                                  'device': _deviceInfo.text
+                                  'device': _deviceInfo.text,
+                                  'covidStatus': false,
+                                  'profileImage': ''
                                 });
 
                                 Navigator.of(context).pushAndRemoveUntil(

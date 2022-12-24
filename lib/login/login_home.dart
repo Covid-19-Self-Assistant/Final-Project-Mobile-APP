@@ -116,11 +116,13 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
                           email: _email.text,
                           password: _password.text,
                         );
-                        print(userCredential.user);
                         if (userCredential.user != null &&
                             userCredential.user!.email != null) {
                           final SharedPreferences prefs = await _prefs;
                           prefs.setBool("isLogin", true);
+                          if (userCredential.user!.email!.isNotEmpty)
+                            prefs.setString(
+                                "email", userCredential.user!.email!);
 
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) => DetailsPage()));
