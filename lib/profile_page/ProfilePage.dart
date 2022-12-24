@@ -14,11 +14,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   List<Connection> connections = [
-    Connection(day: "2022-12-20"),
-    Connection(day: "2022-12-21"),
-    Connection(day: "2022-12-22"),
-    Connection(day: "2022-12-23"),
-    Connection(day: "2022-12-24"),
+    // Connection(day: "2022-12-20"),
+    // Connection(day: "2022-12-21"),
+    // Connection(day: "2022-12-22"),
+    // Connection(day: "2022-12-23"),
+    // Connection(day: "2022-12-24"),
   ];
   bool profileLoading = false;
   final picker = ImagePicker();
@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final users = FirebaseFirestore.instance.collection('users');
   final storageReference = FirebaseStorage.instance.ref().child('images');
 
-  Future getTheUsesCovidStatus() async {
+  Future getUserDetails() async {
     try {
       DocumentSnapshot<Map<String, dynamic>> status =
           await users.doc(dummyName).get();
@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    getTheUsesCovidStatus();
+    getUserDetails();
     super.initState();
   }
 
@@ -179,6 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class Connection {
-  final String day;
-  Connection({required this.day});
+  String day;
+  String user;
+  String email;
+  bool selectedStatus;
+  Connection(
+      {this.day = "",
+      required this.email,
+      required this.user,
+      required this.selectedStatus});
 }
