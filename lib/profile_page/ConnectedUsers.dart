@@ -1,3 +1,4 @@
+import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -8,14 +9,14 @@ class ConnectedUsers extends StatefulWidget {
 
 class _ConnectedUsersState extends State<ConnectedUsers> {
   // variables =========>
-  List<UserStatus> userStatus = [
-    UserStatus(
-        userName: "User 1",
-        selectedStatus: false,
-        email: "dilshanthilina53@gmail.com"),
-    UserStatus(
-        userName: "User 2", selectedStatus: false, email: "dummy@gmail.com"),
-    UserStatus(userName: "User 3", selectedStatus: false, email: ""),
+  List<Connection> userStatus = [
+    // UserStatus(
+    //     userName: "User 1",
+    //     selectedStatus: false,
+    //     email: "dilshanthilina53@gmail.com"),
+    // UserStatus(
+    //     userName: "User 2", selectedStatus: false, email: "dummy@gmail.com"),
+    // UserStatus(userName: "User 3", selectedStatus: false, email: ""),
   ];
   List<String> _selectedUsesEmails = [];
   bool isSelectAll = false;
@@ -27,6 +28,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
   // end of the variables
 
   // functions =========>
+
   void _selectAll() {
     setState(() {
       isSelectAll = true;
@@ -122,6 +124,10 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
   // build method =============>
   @override
   Widget build(BuildContext context) {
+    List<Connection> connections =
+        ModalRoute.of(context)!.settings.arguments as List<Connection>;
+    userStatus = connections;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: isSelectAll ? _clearAll : _selectAll,
@@ -146,12 +152,12 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
             child: CheckboxListTile(
               title: Row(children: [
                 CircleAvatar(
-                  child: Text(userStatus[index].userName[0]),
+                  child: Text(userStatus[index].user[0]),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Text(userStatus[index].userName),
+                Text(userStatus[index].user),
               ]),
               // title: Text(userStatus[index].userName),
               value: userStatus[index].selectedStatus,
@@ -162,15 +168,4 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
       ),
     );
   }
-}
-
-class UserStatus {
-  bool selectedStatus;
-  String userName;
-  String email;
-
-  UserStatus(
-      {required this.userName,
-      required this.selectedStatus,
-      required this.email});
 }

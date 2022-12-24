@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:flutter/material.dart';
 
@@ -9,17 +10,52 @@ class ConnectivityDetails extends StatefulWidget {
 }
 
 class _ConnectivityDetailsState extends State<ConnectivityDetails> {
-  List<Connection> connections = [
-    Connection(day: "2022-12-20"),
-    Connection(day: "2022-12-21"),
-    Connection(day: "2022-12-22"),
-    Connection(day: "2022-12-23"),
-    Connection(day: "2022-12-24"),
-  ];
+  List<Connection> connections = [];
+  List<Connection> newConnections = [];
 
   late List<Connection> allConnections;
 
   bool type = false;
+
+  // TODO: get the user from the firestore
+  final dummyName = "angela@gmail.com";
+  final users = FirebaseFirestore.instance.collection('connections');
+
+  Future getUserConnections() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> status =
+          await users.doc(dummyName).get();
+      Map<String, dynamic>? data = status.data();
+      if (data != null) {
+        List details = data['details'];
+        for (var i = 0; i < details.length; i++) {
+          var detail = details[i];
+          connections.add(Connection(
+              day: detail['date'],
+              user: detail['name'],
+              selectedStatus: false,
+              email: detail['email']));
+
+          newConnections.removeWhere((element) => element.day == detail['date']);    
+          newConnections.add(Connection(
+              day: detail['date'],
+              user: detail['name'],
+              selectedStatus: false,
+              email: detail['email']));
+          
+
+        }
+
+
+      }
+
+      if (data != null) {
+        setState(() {});
+      }
+    } catch (e) {
+      // TODO: error handling
+    }
+  }
 
   void _searchByDate() async {
     DateTime? pickeddate = await showDatePicker(
@@ -30,22 +66,23 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
     );
 
     if (pickeddate != null) {
-      var year = pickeddate.year; 
+      var year = pickeddate.year;
       var month = pickeddate.month;
       var day = pickeddate.day;
       var date = '$year-$month-$day';
       setState(() {
         List<Connection> searchedConnections =
-            connections.where((element) => element.day == date).toList();
+            newConnections.where((element) => element.day == date).toList();
 
-        connections = searchedConnections;
+        newConnections = searchedConnections;
       });
     }
   }
 
   @override
   void initState() {
-    allConnections = connections;
+    getUserConnections();
+    allConnections = newConnections;
     super.initState();
   }
 
@@ -55,7 +92,7 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            connections = allConnections;
+            newConnections = allConnections;
           });
         },
         child: Icon(Icons.refresh),
@@ -69,18 +106,25 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
       body: Column(
         children: [
           // days list
-          ...connections
-              .map(((e) => InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/usersList');
-                    },
-                    child: Card(
-                      child: ListTile(
-                        title: Text(e.day.toString()),
-                      ),
-                    ),
-                  )))
-              .toList(),
+          ...newConnections.map(
+            ((con) {
+              String date = con.day.toString();
+              List<Connection> filteredConnections =
+                  connections.where((element) => element.day == date).toList();
+
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/usersList',
+                      arguments: filteredConnections);
+                },
+                child: Card(
+                  child: ListTile(
+                    title: Text(date),
+                  ),
+                ),
+              );
+            }),
+          ).toList(),
         ],
       ),
     );
