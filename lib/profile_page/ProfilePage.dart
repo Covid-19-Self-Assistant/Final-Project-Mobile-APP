@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/profile_page/PickImageFromGalleryOrCamera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,24 @@ class _ProfilePageState extends State<ProfilePage> {
   late XFile? pickedFile;
   bool isImagesPicked = false;
   bool covidStatus = false;
+
+  // TODO: get the user from the firestore
+  final dummyName = "angela@gmail.com";
+  final users = FirebaseFirestore.instance.collection('users');
+  Future getTheUsesCovidStatus() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> status =
+          await users.doc(dummyName).get();
+      Map<String, dynamic>? data = status.data();
+      if (data != null) {
+        setState(() {
+          covidStatus = data['covidStatus'] as bool;
+        });
+      }
+    } catch (e) {
+      // TODO: error handling
+    }
+  }
 
   // TODO: get the profile details from the api
 
@@ -53,6 +72,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Color getCovidColorCode() {
     return covidStatus == true ? Colors.red : Colors.green;
+  }
+
+  @override
+  void initState() {
+    getTheUsesCovidStatus();
+    super.initState();
   }
 
   @override
