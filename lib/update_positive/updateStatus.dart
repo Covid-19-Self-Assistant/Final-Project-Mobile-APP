@@ -18,7 +18,6 @@ class _StateChangerState extends State<StateChanger> {
   bool value = false;
   bool isLoading = false;
 
-  // TODO: get the user from the firestore
   String? dummyName = "";
   final users = FirebaseFirestore.instance.collection('users');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectivityDetails extends StatefulWidget {
   const ConnectivityDetails({super.key});
@@ -17,12 +18,17 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
 
   bool type = false;
 
-  // TODO: get the user from the firestore
-  final dummyName = "angela@gmail.com";
+  String? dummyName = "";
   final users = FirebaseFirestore.instance.collection('connections');
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future getUserConnections() async {
     try {
+      final SharedPreferences prefs = await _prefs;
+      setState(() {
+        dummyName = prefs.getString("email");
+      });
       DocumentSnapshot<Map<String, dynamic>> status =
           await users.doc(dummyName).get();
       Map<String, dynamic>? data = status.data();
@@ -36,17 +42,14 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
               selectedStatus: false,
               email: detail['email']));
 
-          newConnections.removeWhere((element) => element.day == detail['date']);    
+          newConnections
+              .removeWhere((element) => element.day == detail['date']);
           newConnections.add(Connection(
               day: detail['date'],
               user: detail['name'],
               selectedStatus: false,
               email: detail['email']));
-          
-
         }
-
-
       }
 
       if (data != null) {
