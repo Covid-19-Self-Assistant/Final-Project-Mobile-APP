@@ -15,6 +15,7 @@ class StateChanger extends StatefulWidget {
 
 class _StateChangerState extends State<StateChanger> {
   bool value = false;
+  bool isLoading = false;
 
   // TODO: get the user from the firestore
   final dummyName = "angela@gmail.com";
@@ -52,22 +53,24 @@ class _StateChangerState extends State<StateChanger> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Spacer(),
-            Image.asset(
-              // value ? 'assets/images/on.png' : 'assets/images/off.png',
-              value
-                  ? 'assets/images/positive.PNG'
-                  : 'assets/images/negative.PNG',
-              height: 300,
-            ),
-            Spacer(),
-            buildPlatforms(),
-            const SizedBox(height: 12),
-            const SizedBox(height: 12),
-          ],
-        ),
+        child: isLoading
+            ? CircularProgressIndicator()
+            : Column(
+                children: [
+                  Spacer(),
+                  Image.asset(
+                    // value ? 'assets/images/on.png' : 'assets/images/off.png',
+                    value
+                        ? 'assets/images/positive.PNG'
+                        : 'assets/images/negative.PNG',
+                    height: 300,
+                  ),
+                  Spacer(),
+                  buildPlatforms(),
+                  const SizedBox(height: 12),
+                  const SizedBox(height: 12),
+                ],
+              ),
       ),
     );
   }
@@ -104,9 +107,19 @@ class _StateChangerState extends State<StateChanger> {
           value: value,
           onChanged: (value) async {
             try {
+              setState(() {
+                isLoading = true;
+              });
               await changeCovidStatus(value);
-              setState(() => this.value = value);
+              setState(() {
+                this.value = value;
+                isLoading = false;
+              });
             } catch (e) {
+              setState(() {
+                isLoading = false;
+              });
+
               // TODO: add error dialog
             }
           },
@@ -119,9 +132,19 @@ class _StateChangerState extends State<StateChanger> {
           value: value,
           onChanged: (value) async {
             try {
+              setState(() {
+                isLoading = true;
+              });
               await changeCovidStatus(value);
-              setState(() => this.value = value);
+              setState(() {
+                this.value = value;
+                isLoading = false;
+              });
             } catch (e) {
+              setState(() {
+                isLoading = false;
+              });
+
               // TODO: add error dialog
             }
           },
