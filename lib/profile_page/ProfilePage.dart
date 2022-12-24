@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/profile_page/PickImageFromGalleryOrCamera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,13 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
   bool profileLoading = false;
   final picker = ImagePicker();
-  late XFile? pickedFile;
   bool isImagesPicked = false;
   bool covidStatus = false;
+  String profileImage = "";
 
   // TODO: get the user from the firestore
   final dummyName = "angela@gmail.com";
   final users = FirebaseFirestore.instance.collection('users');
+  final storageReference = FirebaseStorage.instance.ref().child('images');
+
   Future getTheUsesCovidStatus() async {
     try {
       DocumentSnapshot<Map<String, dynamic>> status =
@@ -36,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (data != null) {
         setState(() {
           covidStatus = data['covidStatus'] as bool;
+          profileImage = data['profileImage'];
         });
       }
     } catch (e) {
@@ -51,11 +55,18 @@ class _ProfilePageState extends State<ProfilePage> {
           await PickImageFromGalleryOrCamera.getProfileImage(context, picker);
 
       if (_image!.path != "") {
-        setState(() {
-          isImagesPicked = true;
-          profileLoading = true;
-          pickedFile = _image;
-        });
+        try {
+          await storageReference.putFile(File(_image!.path));
+          String imageUrl = await storageReference.getDownloadURL();
+          await users.doc(dummyName).update({"profileImage": imageUrl});
+          setState(() {
+            isImagesPicked = true;
+            profileLoading = true;
+            profileImage = imageUrl;
+          });
+        } catch (e) {
+          print(e);
+        }
       } else {
         print('No image');
       }
@@ -82,6 +93,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(profileImage);
+    print("==================");
     return Scaffold(
       appBar: AppBar(title: Text("Profile")),
       body: SingleChildScrollView(
@@ -93,14 +106,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                     height: 100,
                     width: 100,
-                    child: isImagesPicked == false
-                        ? CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/doctor.png'),
+                    child: profileImage.isEmpty
+                        ? Container(
+                            color: Colors.deepPurple,
                           )
                         : Container(
-                            child: Image.file(
-                              File(pickedFile!.path),
+                            child: Image.network(
+                              profileImage,
                               fit: BoxFit.cover,
                             ),
                           )),

@@ -14,14 +14,14 @@ class StateChanger extends StatefulWidget {
 }
 
 class _StateChangerState extends State<StateChanger> {
-  bool value = true;
+  bool value = false;
 
   // TODO: get the user from the firestore
   final dummyName = "angela@gmail.com";
   final users = FirebaseFirestore.instance.collection('users');
 
   Future changeCovidStatus(bool value) async {
-    return users.doc(dummyName).set({"covidStatus": value});
+    return users.doc(dummyName).update({"covidStatus": value});
   }
 
   Future getTheUsesCovidStatus() async {
