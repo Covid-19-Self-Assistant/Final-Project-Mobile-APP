@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StateChanger extends StatefulWidget {
   final String title;
@@ -18,14 +19,20 @@ class _StateChangerState extends State<StateChanger> {
   bool isLoading = false;
 
   // TODO: get the user from the firestore
-  final dummyName = "angela@gmail.com";
+  String? dummyName = "";
   final users = FirebaseFirestore.instance.collection('users');
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  
 
   Future changeCovidStatus(bool value) async {
     return users.doc(dummyName).update({"covidStatus": value});
   }
 
   Future getTheUsesCovidStatus() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      dummyName = prefs.getString("email");
+    });
     try {
       setState(() {
         isLoading = true;

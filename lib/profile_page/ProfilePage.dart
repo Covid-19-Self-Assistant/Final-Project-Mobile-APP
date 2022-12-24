@@ -13,25 +13,27 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  List<Connection> connections = [
-    // Connection(day: "2022-12-20"),
-    // Connection(day: "2022-12-21"),
-    // Connection(day: "2022-12-22"),
-    // Connection(day: "2022-12-23"),
-    // Connection(day: "2022-12-24"),
-  ];
+  List<Connection> connections = [];
   bool isProfileLoading = false;
   final picker = ImagePicker();
   bool isImagesPicked = false;
   bool covidStatus = false;
   String profileImage = "";
+  String userName = "";
 
   // TODO: get the user from the firestore
-  final dummyName = "angela@gmail.com";
+  String? dummyName = "";
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   final users = FirebaseFirestore.instance.collection('users');
   final storageReference = FirebaseStorage.instance.ref().child('images');
 
   Future getUserDetails() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      dummyName = prefs.getString("email");
+    });
     try {
       setState(() {
         isProfileLoading = true;
@@ -42,8 +44,10 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isProfileLoading = false;
       });
+      print(data);
       if (data != null) {
         setState(() {
+          userName = '${data['firstName']} ${data['lastName']}';
           covidStatus = data['covidStatus'] as bool;
           profileImage = data['profileImage'];
         });
@@ -104,6 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(userName);
     return Scaffold(
       appBar: AppBar(title: Text("Profile")),
       body: SingleChildScrollView(
@@ -132,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Angela Yu',
+                  userName.toString(),
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
