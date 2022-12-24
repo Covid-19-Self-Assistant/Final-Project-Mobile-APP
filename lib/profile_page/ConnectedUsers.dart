@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -13,7 +15,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
         userName: "User 1",
         selectedStatus: false,
         email: "dilshanthilina53@gmail.com"),
-    UserStatus(userName: "User 2", selectedStatus: false, email: ""),
+    UserStatus(userName: "User 2", selectedStatus: false, email: "dummy@gmail.com"),
     UserStatus(userName: "User 3", selectedStatus: false, email: ""),
   ];
   List<String> _selectedUsesEmails = [];
@@ -22,7 +24,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
   String messageForNoUsersSelected = 'Sorry No users have been selected ?';
   String messageWhenUsersAreSelected =
       'Do you want to send emails for all user(s) ?';
-  String actionButtonText = 'Send Email For Selected User(s)';
+  String actionButtonText = 'Send email';
   // end of the variables
 
   // functions =========>
@@ -31,8 +33,8 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
       isSelectAll = true;
     });
     for (var i = 0; i < userStatus.length; i++) {
-      _selectedUsesEmails.add(userStatus[i].email);
       setState(() {
+        _selectedUsesEmails.add(userStatus[i].email);
         userStatus[i].selectedStatus = true;
       });
     }
@@ -70,8 +72,8 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
                     onPressed: () async {
                       type = true;
                       final Email email = Email(
-                        body: 'Email body',
-                        subject: 'Email subject',
+                        subject: 'Covid 19 warning',
+                        body: 'This is a warning notice.....',
                         recipients: _selectedUsesEmails,
                         isHTML: false,
                       );
@@ -97,15 +99,18 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
   }
 
   void _toggleSelectingUsers(int index, bool value) {
+    print(_selectedUsesEmails.length);
+        print(userStatus.length);
     setState(() {
       userStatus[index].selectedStatus = value;
       if (value == true) {
-        if(_selectedUsesEmails.length == userStatus.length - 1){
+        
+        if (_selectedUsesEmails.length == userStatus.length - 1) {
           setState(() {
             isSelectAll = true;
+            _selectedUsesEmails.add(userStatus[index].email);
           });
         }
-        _selectedUsesEmails.add(userStatus[index].email);
       } else {
         setState(() {
           isSelectAll = false;
@@ -141,7 +146,16 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
         itemBuilder: (context, index) {
           return Card(
             child: CheckboxListTile(
-              title: Text(userStatus[index].userName),
+              title: Row(children: [
+                CircleAvatar(
+                  child: Text(userStatus[index].userName[0]),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(userStatus[index].userName),
+              ]),
+              // title: Text(userStatus[index].userName),
               value: userStatus[index].selectedStatus,
               onChanged: (value) => _toggleSelectingUsers(index, value!),
             ),

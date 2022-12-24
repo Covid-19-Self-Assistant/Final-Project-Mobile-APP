@@ -1,5 +1,4 @@
 import 'package:dating_app/symptoms%20screen/testCovid.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SpreadScreen extends StatelessWidget {
@@ -60,7 +59,6 @@ class SpreadScreen extends StatelessWidget {
                             height: 5.0,
                           ),
                           Expanded(
-                            
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.of(context).push(
@@ -111,18 +109,15 @@ class SpreadScreen extends StatelessWidget {
                     height: 20,
                   ),
 
-                  Container(
-                    width: double.infinity,
-                    color: Color.fromRGBO(255, 255, 255, 0.957),
-                    height: 160,
-                    child: ListView.builder(
-                      
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: false,
-                      itemBuilder: ((context, index) => SymptomsCard(
-                          image: _symptomsCards[index].image,
-                          title: _symptomsCards[index].title)),
-                      itemCount: _symptomsCards.length,
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _symptomsCards
+                          .map((card) => SymptomsCard(
+                                image: card.image,
+                                title: card.title,
+                              ))
+                          .toList(),
                     ),
                   ),
 
@@ -254,15 +249,16 @@ class SymptomsCard extends StatelessWidget {
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(7),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 0),
-              blurRadius: 20,
-              color: Colors.black,
-            )
-          ]),
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 0),
+            blurRadius: 5,
+            color: Colors.black,
+          )
+        ],
+      ),
       child: Column(
         children: [
           Image.asset(image, height: 90),
