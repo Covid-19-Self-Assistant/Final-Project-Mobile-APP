@@ -15,14 +15,14 @@ jobs:
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
-          path: build/app/outputs/apk/release/app-release.apk
+          name: app-debug.apk
+          path: build/app/outputs/apk/debug/app-debug.apk
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: app-release.apk
+          name: app-debug.apk
       - run: ls
 
