@@ -3,6 +3,7 @@ import 'package:dating_app/login/login_home.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import 'theme_helper.dart';
 
@@ -20,28 +21,29 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   bool checkedValue = false;
   bool showSnipper = false;
   bool checkboxValue = false;
-  late String _email;
-  late String _password;
+  late TextEditingController firstName = TextEditingController();
+  late TextEditingController lastName = TextEditingController();
+  late TextEditingController birthday = TextEditingController();
+  late TextEditingController mobile = TextEditingController();
+  late TextEditingController _email = TextEditingController();
+  late TextEditingController _password = TextEditingController();
   late TextEditingController _deviceInfo = TextEditingController();
-  late String username;
   TextEditingController _date = TextEditingController();
-
-  //
+  bool isLoading = false;
 
   final deviceInfoPlugin = DeviceInfoPlugin();
 
   void _getDeviceInformations() async {
-    final deviceInfo = await deviceInfoPlugin.deviceInfo;
-    final allInfo = deviceInfo.data;
+    String? address = await FlutterBluetoothSerial.instance.address;
+
     setState(() {
-      _deviceInfo.text = allInfo['device'];
+      if (address != null) _deviceInfo.text = address;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var FontAwesomeIcons;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -77,7 +79,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                       decoration: ThemeHelper().textInputDecoration(
                           'First Name', 'Enter your first name'),
                       onChanged: (value) {
-                        username = value;
+                        firstName.text = value;
                       },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
@@ -89,6 +91,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     child: TextFormField(
                       decoration: ThemeHelper().textInputDecoration(
                           'Last Name', 'Enter your last name'),
+                      onChanged: (value) {
+                        lastName.text = value;
+                      },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
@@ -108,7 +113,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                         return null;
                       },
                       onChanged: (value) {
-                        _email = value;
+                        _email.text = value;
                       },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
@@ -116,6 +121,9 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                   SizedBox(height: 20.0),
                   Container(
                     child: TextFormField(
+                      onChanged: (value) {
+                        mobile.text = value;
+                      },
                       decoration: ThemeHelper().textInputDecoration(
                           "Mobile Number", "Enter your mobile number"),
                       keyboardType: TextInputType.phone,
@@ -134,7 +142,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                   //Birthday
                   Container(
                     child: TextFormField(
-                      controller: _date,
+                      controller: birthday,
                       decoration: ThemeHelper().textInputDecoration(
                           'BirthDay', 'Enter your BirthDay'),
                       onTap: () async {
@@ -152,7 +160,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                           var date = '$year/$month/$day';
                           setState(() {
                             print(pickeddate);
-                            _date.text = date;
+                            birthday.text = date;
                           });
                         }
                       },
@@ -163,14 +171,6 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     height: 20.0,
                   ),
 
-                  //Blood Group
-                  Container(
-                    child: TextFormField(
-                      decoration: ThemeHelper().textInputDecoration(
-                          'Blood Group', 'Enter your Blood Group'),
-                    ),
-                    decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                  ),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -188,7 +188,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                         return null;
                       },
                       onChanged: (value) {
-                        _password = value;
+                        _password.text = value;
                       },
                     ),
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
@@ -199,22 +199,23 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     child: Text('Device Infor'),
                   ),
 
-                  if(_deviceInfo.text != "") Container(
-                    child: TextFormField(
-                      enabled: false,
-                      controller: _deviceInfo,
-                      decoration: ThemeHelper().textInputDecoration(
-                          "Device Infor*", "Enter your device infor"),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Please enter your device infor";
-                        }
-                        return null;
-                      },
-                      onChanged: null,
+                  if (_deviceInfo.text != "")
+                    Container(
+                      child: TextFormField(
+                        enabled: false,
+                        controller: _deviceInfo,
+                        decoration: ThemeHelper().textInputDecoration(
+                            "Device Infor*", "Enter your device infor"),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return "Please enter your device infor";
+                          }
+                          return null;
+                        },
+                        onChanged: null,
+                      ),
+                      decoration: ThemeHelper().inputBoxDecorationShaddow(),
                     ),
-                    decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                  ),
 
                   FormField<bool>(
                     builder: (state) {
@@ -271,14 +272,16 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                           style: ThemeHelper().buttonStyle(),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                            child: Text(
-                              "Register".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: isLoading
+                                ? CircularProgressIndicator()
+                                : Text(
+                                    "REGISTER",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                           onPressed: () async {
                             setState(() {
@@ -286,14 +289,26 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                             });
 
                             try {
-                              final newUser =
+                              setState(() {
+                                isLoading = true;
+                              });
+                              final UserCredential newUser =
                                   await _auth.createUserWithEmailAndPassword(
-                                email: _email,
-                                password: _password,
+                                email: _email.text,
+                                password: _password.text,
                               );
-                              if (newUser != null) {
-                                _firestore.collection('users').doc(_email).set({
-                                  'First Name': username,
+                              if (newUser.user != null &&
+                                  newUser.user!.email != null) {
+                                _firestore
+                                    .collection('users')
+                                    .doc(_email.text)
+                                    .set({
+                                  'firstName': firstName.text,
+                                  'lastName': lastName.text,
+                                  'email': _email.text,
+                                  'mobile': mobile.text,
+                                  'birthDay': birthday.text,
+                                  'device': _deviceInfo.text
                                 });
 
                                 Navigator.of(context).pushAndRemoveUntil(
@@ -303,15 +318,15 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                                     (Route<dynamic> route) => false);
                               }
                               setState(() {
-                                showSnipper = false;
+                                isLoading = false;
                               });
                             } catch (e) {
                               print(e);
+                              setState(() {
+                                isLoading = false;
+                              });
                             }
-                          }
-
-                          // },
-                          ),
+                          }),
                     ),
                   ),
                   SizedBox(height: 30.0),

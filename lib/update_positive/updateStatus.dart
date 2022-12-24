@@ -27,8 +27,14 @@ class _StateChangerState extends State<StateChanger> {
 
   Future getTheUsesCovidStatus() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       DocumentSnapshot<Map<String, dynamic>> status =
           await users.doc(dummyName).get();
+      setState(() {
+        isLoading = false;
+      });
       Map<String, dynamic>? data = status.data();
       if (data != null) {
         setState(() {
@@ -36,6 +42,9 @@ class _StateChangerState extends State<StateChanger> {
         });
       }
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       // TODO: error handling
     }
   }

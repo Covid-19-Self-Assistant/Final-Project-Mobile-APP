@@ -16,6 +16,7 @@ class _ShowDevicesState extends State<ShowDevices> {
 
   void _startScan() async {
     _devices.clear();
+
     FlutterBluetoothSerial.instance.startDiscovery().listen((value) {
       // Update the list of Bluetooth map
       setState(() {

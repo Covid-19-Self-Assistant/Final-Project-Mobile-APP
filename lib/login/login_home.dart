@@ -1,5 +1,6 @@
 import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:dating_app/registration_page/registration_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,10 +28,12 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
 
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -104,20 +107,58 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
                 child: TextButton(
                   onPressed: () async {
                     if (formkey.currentState!.validate()) {
-                      final SharedPreferences prefs = await _prefs;
-                      prefs.setBool("isLogin", true);
+                      try {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        UserCredential userCredential =
+                            await _auth.signInWithEmailAndPassword(
+                          email: _email.text,
+                          password: _password.text,
+                        );
+                        print(userCredential.user);
+                        if (userCredential.user != null &&
+                            userCredential.user!.email != null) {
+                          final SharedPreferences prefs = await _prefs;
+                          prefs.setBool("isLogin", true);
 
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => DetailsPage()));
-                      print("Validated");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => DetailsPage()));
+                          print("Validated");
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } catch (e) {
+                        print(e);
+                        await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                actions: [
+                                  MaterialButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Cancel')),
+                                ],
+                                content: Text("Invalid user credintials"),
+                              );
+                            });
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     } else {
                       print("Not Validated");
                     }
                   },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
+                  child: isLoading
+                      ? CircularProgressIndicator()
+                      : Text(
+                          'Login',
+                          style: TextStyle(color: Colors.white, fontSize: 25),
+                        ),
                 ),
               ),
               SizedBox(
