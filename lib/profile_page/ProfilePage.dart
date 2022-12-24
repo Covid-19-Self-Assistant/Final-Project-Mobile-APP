@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final picker = ImagePicker();
   late XFile? pickedFile;
   bool isImagesPicked = false;
+  bool covidStatus = false;
 
   // TODO: get the profile details from the api
 
@@ -50,9 +51,14 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Color getCovidColorCode() {
+    return covidStatus == true ? Colors.red : Colors.green;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Profile")),
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraint) {
@@ -60,16 +66,23 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 SizedBox(height: 20),
                 Container(
-                    height: 200,
-                    width: 200,
+                    height: 100,
+                    width: 100,
                     child: isImagesPicked == false
                         ? CircleAvatar(
                             backgroundImage:
                                 AssetImage('assets/images/doctor.png'),
                           )
                         : Container(
-                            child: Image.file(File(pickedFile!.path)),
+                            child: Image.file(
+                              File(pickedFile!.path),
+                              fit: BoxFit.cover,
+                            ),
                           )),
+                MaterialButton(
+                  onPressed: () => saveImage(context),
+                  child: Icon(Icons.cloud_upload),
+                ),
                 SizedBox(height: 20),
                 Text(
                   'Angela Yu',
@@ -78,17 +91,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
-                MaterialButton(
-                  onPressed: () => saveImage(context),
-                  child: Icon(Icons.cloud_upload),
+                Icon(
+                  Icons.coronavirus,
+                  color: getCovidColorCode(),
                 ),
-                SizedBox(height: 10),
                 Text(
-                  'Flutter Developer',
+                  "covid status",
                   style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
+                    color: getCovidColorCode(),
                   ),
                 ),
                 MaterialButton(
@@ -101,43 +111,30 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   child: Text("Log out"),
                 ),
-                SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  child: MaterialButton(
-                    onPressed: () {},
-                    color: Colors.blue,
-                    child: Text(
-                      'Edit Profile',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  child: MaterialButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/connectivityDetails");
-                    },
-                    color: Colors.blue,
-                    child: Text(
-                      'Connectivity Details',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+                profileSections("Edit page", ''),
+                profileSections("Connection Details", 'connectivityDetails'),
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Card profileSections(String title, String path) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      color: Color.fromARGB(255, 179, 222, 243),
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 15),
+        ),
+        trailing: IconButton(
+          onPressed: () {
+            if (path.isNotEmpty) Navigator.pushNamed(context, '/$path');
+          },
+          icon: Icon(Icons.arrow_forward),
         ),
       ),
     );
