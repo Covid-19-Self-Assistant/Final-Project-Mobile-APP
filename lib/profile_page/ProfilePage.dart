@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // Connection(day: "2022-12-23"),
     // Connection(day: "2022-12-24"),
   ];
-  bool profileLoading = false;
+  bool isProfileLoading = false;
   final picker = ImagePicker();
   bool isImagesPicked = false;
   bool covidStatus = false;
@@ -33,9 +33,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future getUserDetails() async {
     try {
+      setState(() {
+        isProfileLoading = true;
+      });
       DocumentSnapshot<Map<String, dynamic>> status =
           await users.doc(dummyName).get();
       Map<String, dynamic>? data = status.data();
+      setState(() {
+        isProfileLoading = false;
+      });
       if (data != null) {
         setState(() {
           covidStatus = data['covidStatus'] as bool;
@@ -43,6 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
+      setState(() {
+        isProfileLoading = false;
+      });
       // TODO: error handling
     }
   }
@@ -56,12 +65,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (_image!.path != "") {
         try {
+          setState(() {
+            isProfileLoading = true;
+          });
           await storageReference.putFile(File(_image!.path));
           String imageUrl = await storageReference.getDownloadURL();
           await users.doc(dummyName).update({"profileImage": imageUrl});
           setState(() {
-            isImagesPicked = true;
-            profileLoading = true;
+            isImagesPicked = false;
             profileImage = imageUrl;
           });
         } catch (e) {
@@ -72,11 +83,11 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       setState(() {
-        profileLoading = false;
+        isProfileLoading = false;
       });
     } catch (e) {
       setState(() {
-        profileLoading = false;
+        isProfileLoading = false;
       });
     }
   }
@@ -93,8 +104,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(profileImage);
-    print("==================");
     return Scaffold(
       appBar: AppBar(title: Text("Profile")),
       body: SingleChildScrollView(
@@ -104,18 +113,19 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 SizedBox(height: 20),
                 Container(
-                    height: 100,
-                    width: 100,
-                    child: profileImage.isEmpty
-                        ? Container(
-                            color: Colors.deepPurple,
-                          )
-                        : Container(
-                            child: Image.network(
-                              profileImage,
-                              fit: BoxFit.cover,
-                            ),
-                          )),
+                    width: 200,
+                    height: 200,
+                    child: isProfileLoading
+                        ? CircularProgressIndicator()
+                        : profileImage.isEmpty
+                            ? CircleAvatar(
+                                backgroundColor: Colors.deepPurple,
+                              )
+                            : CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  profileImage,
+                                ),
+                              )),
                 MaterialButton(
                   onPressed: () => saveImage(context),
                   child: Icon(Icons.cloud_upload),
