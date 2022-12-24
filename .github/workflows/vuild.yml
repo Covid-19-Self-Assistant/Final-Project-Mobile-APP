@@ -1,0 +1,18 @@
+name: Build and Upload
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: flutter/flutter-action@v2
+      with:
+        flutter-version: stable
+        channel: master
+        build-flavor: profile
+    - uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: build/
