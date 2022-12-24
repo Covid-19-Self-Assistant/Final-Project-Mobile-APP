@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/components/constants.dart';
 import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowDevices extends StatefulWidget {
   @override
@@ -10,19 +12,92 @@ class ShowDevices extends StatefulWidget {
 
 class _ShowDevicesState extends State<ShowDevices> {
   // Initialize a list to store the Bluetooth devices
-  List<BluetoothDiscoveryResult> _devices = <BluetoothDiscoveryResult>[];
+  Set<String> _devices = Set();
+  bool isDiscovering = false;
+  List<ConnectedUser> connectedUsers = [];
+
+  String? dummyName = "";
+  final users = FirebaseFirestore.instance.collection('users');
+
+  //
+  final connections = FirebaseFirestore.instance.collection('connections');
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool isSyncing = false;
+
+  Future syncWithUser(String email, String userName) async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      dummyName = prefs.getString("email");
+    });
+
+    try {
+      var date = DateTime.now();
+      setState(() {
+        isSyncing = true;
+      });
+      
+      await connections.doc(dummyName).set({
+        "details": [
+          {
+            "date": '${date.year}-${date.month}-${date.day}',
+            "email": email,
+            "name": userName
+          }
+        ]
+      });
+      setState(() {
+        isSyncing = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isSyncing = false;
+      });
+    }
+  }
 
   var type = false;
 
-  void _startScan() async {
+  Future<void> _startScan() async {
     _devices.clear();
 
-    FlutterBluetoothSerial.instance.startDiscovery().listen((value) {
-      // Update the list of Bluetooth map
-      setState(() {
-        _devices.add(value);
+    try {
+      FlutterBluetoothSerial.instance.startDiscovery().listen((value) async {
+        // Update the list of Bluetooth map
+        _devices.add(value.device.address);
+        // setState(() {
+        // });
       });
-    });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> startDiscovering() async {
+    print("I am clicked here");
+    try {
+      setState(() {
+        isDiscovering = true;
+      });
+      QuerySnapshot<Map<String, dynamic>> matchedUsers =
+          await users.where("device", whereIn: _devices.toList()).get();
+      setState(() {
+        isDiscovering = false;
+      });
+      for (var i = 0; i < matchedUsers.docs.length; i++) {
+        var user = matchedUsers.docs[i].data();
+        connectedUsers.add(ConnectedUser(
+            email: user['email'],
+            firstName: user['firstName'],
+            profileImage: user['profileImage']));
+      }
+    } catch (e) {
+      print(e);
+      print("+++++++++++");
+      setState(() {
+        isDiscovering = false;
+      });
+    }
   }
 
   void _syncDialogModal() async {
@@ -50,6 +125,12 @@ class _ShowDevicesState extends State<ShowDevices> {
             content: Text('Do you want to sync with **** ?'),
           );
         });
+  }
+
+  @override
+  void initState() {
+    _startScan();
+    super.initState();
   }
 
   Widget build(BuildContext context) {
@@ -132,27 +213,35 @@ class _ShowDevicesState extends State<ShowDevices> {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
-              onPressed: _startScan,
+              onPressed: startDiscovering,
               child: Text(
                 'Start Tracing',
                 style: kButtonTextStyle,
               ),
             ),
           ),
+          if (isDiscovering) CircularProgressIndicator(),
           Expanded(
             flex: 2,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.0),
               child: ListView.builder(
-                itemCount: _devices.length,
+                itemCount: connectedUsers.toList().length,
                 itemBuilder: ((context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text(_devices[index].device.name.toString()),
-                      subtitle: Text(_devices[index].device.address.toString()),
+                      leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              connectedUsers.toList()[index].profileImage)),
+                      title: Text(connectedUsers.toList()[index].firstName),
                       trailing: IconButton(
-                        icon: Icon(Icons.sync),
-                        onPressed: _syncDialogModal,
+                        icon: isSyncing
+                            ? CircularProgressIndicator()
+                            : Icon(Icons.sync),
+                        onPressed: () {
+                          syncWithUser(connectedUsers.toList()[index].email,
+                              connectedUsers.toList()[index].firstName);
+                        },
                       ),
                     ),
                   );
@@ -164,4 +253,15 @@ class _ShowDevicesState extends State<ShowDevices> {
       ),
     );
   }
+}
+
+class ConnectedUser {
+  String firstName;
+  String email;
+  String profileImage;
+
+  ConnectedUser(
+      {required this.firstName,
+      required this.profileImage,
+      required this.email});
 }
