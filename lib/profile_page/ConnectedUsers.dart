@@ -1,3 +1,4 @@
+import 'package:dating_app/components/constants.dart';
 import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -46,7 +47,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
     }
   }
 
-  void _sendEmailsForUsrs() async {
+  void _sendEmailsForUsrs(String day) async {
     await showDialog(
         context: context,
         builder: (context) {
@@ -65,7 +66,8 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
                       type = true;
                       final Email email = Email(
                         subject: 'Covid 19 warning',
-                        body: 'This is a warning notice.....',
+                        body:
+                            'This is a warning notice.\n \n I am identified as a covid 19 patient.\n \n As you closely conntected with me in $day be mindfull about this.\n \n Thank you',
                         recipients: _selectedUsesEmails,
                         isHTML: false,
                       );
@@ -133,7 +135,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
         title: Text("Connected users"),
         actions: [
           IconButton(
-            onPressed: _sendEmailsForUsrs,
+            onPressed: () => _sendEmailsForUsrs(userStatus[0].day),
             icon: Icon(Icons.email),
           )
         ],
