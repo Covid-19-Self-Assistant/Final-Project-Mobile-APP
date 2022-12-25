@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/login/login_home.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -30,7 +29,6 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   TextEditingController _date = TextEditingController();
   bool isLoading = false;
 
-  final deviceInfoPlugin = DeviceInfoPlugin();
 
   void _getDeviceInformations() async {
     String? address = await FlutterBluetoothSerial.instance.address;

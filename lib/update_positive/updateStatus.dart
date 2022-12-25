@@ -21,7 +21,6 @@ class _StateChangerState extends State<StateChanger> {
   String? documentName = "";
   final users = FirebaseFirestore.instance.collection('users');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  
 
   Future changeCovidStatus(bool value) async {
     return users.doc(documentName).update({"covidStatus": value});
@@ -130,12 +129,17 @@ class _StateChangerState extends State<StateChanger> {
                 this.value = value;
                 isLoading = false;
               });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Successfully update the covid status."),
+              ));
             } catch (e) {
               setState(() {
                 isLoading = false;
               });
 
-              // TODO: add error dialog
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Unable to change the covid status"),
+              ));
             }
           },
         ),
@@ -155,12 +159,16 @@ class _StateChangerState extends State<StateChanger> {
                 this.value = value;
                 isLoading = false;
               });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Successfully update the covid status."),
+              ));
             } catch (e) {
               setState(() {
                 isLoading = false;
               });
-
-              // TODO: add error dialog
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Unable to change the covid status"),
+              ));
             }
           },
         ),

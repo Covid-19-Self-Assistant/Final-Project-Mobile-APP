@@ -22,8 +22,9 @@ class _ShowDevicesState extends State<ShowDevices> {
   final connections = FirebaseFirestore.instance.collection('connections');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSyncing = false;
+  int sycingNumber = 0;
 
-  Future syncWithUser(String email, String userName) async {
+  Future syncWithUser(String email, String userName, int index) async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       documentName = prefs.getString("email");
@@ -33,10 +34,8 @@ class _ShowDevicesState extends State<ShowDevices> {
       var date = DateTime.now();
       setState(() {
         isSyncing = true;
+        sycingNumber = index;
       });
-
-      QuerySnapshot<Map<String, dynamic>> docSnapshot =
-          await connections.where('_id', isEqualTo: email).get();
 
       await connections.doc(documentName).set({
         'details': FieldValue.arrayUnion(
@@ -52,11 +51,19 @@ class _ShowDevicesState extends State<ShowDevices> {
 
       setState(() {
         isSyncing = false;
+        sycingNumber = 0;
       });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Successfully sync with the user."),
+      ));
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Unable to sync with the user. Please try again"),
+      ));
       print(e);
       setState(() {
         isSyncing = false;
+        sycingNumber = 0;
       });
     }
   }
@@ -88,10 +95,14 @@ class _ShowDevicesState extends State<ShowDevices> {
       });
       for (var i = 0; i < matchedUsers.docs.length; i++) {
         var user = matchedUsers.docs[i].data();
-        connectedUsers.add(ConnectedUser(
-            email: user['email'],
-            firstName: user['firstName'],
-            profileImage: user['profileImage']));
+        int index = connectedUsers
+            .indexWhere((element) => element.email == user['email']);
+        if (index == -1) {
+          connectedUsers.add(ConnectedUser(
+              email: user['email'],
+              firstName: user['firstName'],
+              profileImage: user['profileImage']));
+        }
       }
     } catch (e) {
       print(e);
@@ -99,33 +110,6 @@ class _ShowDevicesState extends State<ShowDevices> {
         isDiscovering = false;
       });
     }
-  }
-
-  void _syncDialogModal() async {
-    // TODO: send the api call and identify the user from the device
-
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            actions: [
-              MaterialButton(
-                  onPressed: () {
-                    type = false;
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('No')),
-              MaterialButton(
-                  onPressed: () {
-                    type = true;
-                    // TODO: send the api call to store sync data in database
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Yes')),
-            ],
-            content: Text('Do you want to sync with **** ?'),
-          );
-        });
   }
 
   @override
@@ -205,21 +189,25 @@ class _ShowDevicesState extends State<ShowDevices> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 30.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.deepPurple, // background
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-              ),
+          SizedBox(
+            height: 20,
+          ),
+          MaterialButton(
               onPressed: startDiscovering,
-              child: Text(
-                'Start Tracing',
-                style: kButtonTextStyle,
-              ),
-            ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "START TRACKING",
+                  ),
+                  Icon(
+                    Icons.cloud_sync_sharp,
+                    size: 50,
+                  ),
+                ],
+              )),
+          SizedBox(
+            height: 20,
           ),
           if (isDiscovering) CircularProgressIndicator(),
           Expanded(
@@ -230,23 +218,22 @@ class _ShowDevicesState extends State<ShowDevices> {
                 itemCount: connectedUsers.toList().length,
                 itemBuilder: ((context, index) {
                   return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Card(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  connectedUsers.toList()[index].profileImage)),
-                          title: Text(connectedUsers.toList()[index].firstName),
-                          trailing: IconButton(
-                            icon: isSyncing
-                                ? CircularProgressIndicator()
-                                : Icon(Icons.sync),
-                            onPressed: () {
-                              syncWithUser(connectedUsers.toList()[index].email,
-                                  connectedUsers.toList()[index].firstName);
-                            },
-                          ),
+                    child: Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                connectedUsers.toList()[index].profileImage)),
+                        title: Text(connectedUsers.toList()[index].firstName),
+                        trailing: IconButton(
+                          icon: isSyncing && sycingNumber == index
+                              ? CircularProgressIndicator()
+                              : Icon(Icons.sync),
+                          onPressed: () {
+                            syncWithUser(
+                                connectedUsers.toList()[index].email,
+                                connectedUsers.toList()[index].firstName,
+                                index);
+                          },
                         ),
                       ),
                     ),

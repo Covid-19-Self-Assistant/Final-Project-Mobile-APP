@@ -93,6 +93,7 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue[900],
         onPressed: () {
           setState(() {
             newConnections = allConnections;
@@ -101,9 +102,17 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
         child: Icon(Icons.refresh),
       ),
       appBar: AppBar(
-        title: Text("Search by date"),
+        backgroundColor: Colors.blue[900],
+        title: Text(
+          "Search by date",
+        ),
         actions: [
-          MaterialButton(onPressed: _searchByDate, child: Icon(Icons.search)),
+          MaterialButton(
+              onPressed: _searchByDate,
+              child: Icon(
+                Icons.search,
+                color: Colors.white,
+              )),
         ],
       ),
       body: Column(
