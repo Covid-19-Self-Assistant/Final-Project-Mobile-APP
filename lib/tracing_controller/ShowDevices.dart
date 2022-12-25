@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/details_pages/details_screen.dart';
-import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +14,6 @@ class _ShowDevicesState extends State<ShowDevices> {
   Set<String> _devices = Set();
   bool isDiscovering = false;
   List<ConnectedUser> connectedUsers = [];
-  List<ConnectedUser> bugConnectedUsers = [];
 
   String? documentName = "";
   final users = FirebaseFirestore.instance.collection('users');
@@ -80,7 +78,6 @@ class _ShowDevicesState extends State<ShowDevices> {
         _devices.add(value.device.address);
       });
     } catch (e) {
-      print("+++++++++++++++");
       print(e);
     }
   }
@@ -90,34 +87,30 @@ class _ShowDevicesState extends State<ShowDevices> {
       setState(() {
         isDiscovering = true;
       });
-
-      print(_devices);
-      print("============== 1");
       QuerySnapshot<Map<String, dynamic>> matchedUsers =
           await users.where("device", whereIn: _devices.toList()).get();
       setState(() {
         isDiscovering = false;
       });
-      print(matchedUsers.docs.length);
       for (var i = 0; i < matchedUsers.docs.length; i++) {
         var user = matchedUsers.docs[i].data();
-
-        connectedUsers.add(ConnectedUser(
-            email: user['email'],
-            firstName: user['firstName'],
-            profileImage: user['profileImage']));
-
+        int index = connectedUsers
+            .indexWhere((element) => element.email == user['email']);
         final SharedPreferences prefs = await _prefs;
-        var myEmail = prefs.getString("email");
-        for (var i = 0; i < connectedUsers.length; i++) {
-          if (myEmail == connectedUsers[i].email) {
+          var myEmail = prefs.getString("email");
+          if(myEmail == user['email']){
             connectedUsers.removeAt(i);
           }
+        
+        if (index == -1) {
+          connectedUsers.add(ConnectedUser(
+              email: user['email'],
+              firstName: user['firstName'],
+              profileImage: user['profileImage']));
         }
       }
     } catch (e) {
       print(e);
-      print("============== 2");
       setState(() {
         isDiscovering = false;
       });
@@ -233,43 +226,9 @@ class _ShowDevicesState extends State<ShowDevices> {
                     child: Card(
                       child: ListTile(
                         leading: CircleAvatar(
-                            backgroundImage: connectedUsers
-                                        .toList()[index]
-                                        .profileImage !=
-                                    ""
-                                ? NetworkImage(
-                                    connectedUsers.toList()[index].profileImage)
-                                : null),
+                            backgroundImage: NetworkImage(
+                                connectedUsers.toList()[index].profileImage)),
                         title: Text(connectedUsers.toList()[index].firstName),
-                        trailing: IconButton(
-                          icon: isSyncing && sycingNumber == index
-                              ? CircularProgressIndicator()
-                              : Icon(Icons.sync),
-                          onPressed: () {
-                            syncWithUser(
-                                connectedUsers.toList()[index].email,
-                                connectedUsers.toList()[index].firstName,
-                                index);
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: ListView.builder(
-                itemCount: _devices.toList().length,
-                itemBuilder: ((context, index) {
-                  return Center(
-                    child: Card(
-                      child: ListTile(
-                        title: Text(_devices.toList()[index]),
                         trailing: IconButton(
                           icon: isSyncing && sycingNumber == index
                               ? CircularProgressIndicator()
