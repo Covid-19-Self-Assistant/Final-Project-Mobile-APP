@@ -121,6 +121,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue[900],
         onPressed: isSelectAll ? _clearAll : _selectAll,
         child: Text(
           isSelectAll ? "Clear All" : "Select All",
@@ -128,7 +129,8 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
         ),
       ),
       appBar: AppBar(
-        title: Text("Connected Users .."),
+        backgroundColor: Colors.blue[900],
+        title: Text("Connected users"),
         actions: [
           IconButton(
             onPressed: _sendEmailsForUsrs,
@@ -143,6 +145,7 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
             child: CheckboxListTile(
               title: Row(children: [
                 CircleAvatar(
+                  backgroundColor: Colors.blue[900],
                   child: Text(userStatus[index].user[0]),
                 ),
                 SizedBox(

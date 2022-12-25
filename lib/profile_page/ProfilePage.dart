@@ -59,7 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
   Future saveImage(context) async {
     try {
       XFile? _image =
@@ -77,8 +76,13 @@ class _ProfilePageState extends State<ProfilePage> {
             isImagesPicked = false;
             profileImage = imageUrl;
           });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Successfully upload the profile picture."),
+          ));
         } catch (e) {
-          print(e);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Not uploaded the profile picture"),
+          ));
         }
       } else {
         print('No image');
@@ -106,9 +110,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(userName);
     return Scaffold(
-      appBar: AppBar(title: Text("Profile")),
+      appBar: AppBar(
+        title: Text("Profile"),
+        backgroundColor: Colors.blue[900],
+      ),
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraint) {
@@ -151,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: getCovidColorCode(),
                   ),
                 ),
-                MaterialButton(
+                ElevatedButton(
                   onPressed: () async {
                     final Future<SharedPreferences> _prefs =
                         SharedPreferences.getInstance();
@@ -160,7 +166,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     prefs.remove("email");
                     Navigator.pushNamed(context, '/login');
                   },
-                  child: Text("Log out"),
+                  child: Text(
+                    "Log out",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 profileSections("Edit page", ''),
                 profileSections("Connection Details", 'connectivityDetails'),
@@ -175,17 +186,20 @@ class _ProfilePageState extends State<ProfilePage> {
   Card profileSections(String title, String path) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      color: Color.fromARGB(255, 179, 222, 243),
+      color: Colors.blue[900],
       child: ListTile(
         title: Text(
           title,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 15, color: Colors.white),
         ),
         trailing: IconButton(
           onPressed: () {
             if (path.isNotEmpty) Navigator.pushNamed(context, '/$path');
           },
-          icon: Icon(Icons.arrow_forward),
+          icon: Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          ),
         ),
       ),
     );
