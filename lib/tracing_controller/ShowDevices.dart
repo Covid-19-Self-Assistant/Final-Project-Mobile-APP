@@ -16,10 +16,9 @@ class _ShowDevicesState extends State<ShowDevices> {
   bool isDiscovering = false;
   List<ConnectedUser> connectedUsers = [];
 
-  String? dummyName = "";
+  String? documentName = "";
   final users = FirebaseFirestore.instance.collection('users');
 
-  //
   final connections = FirebaseFirestore.instance.collection('connections');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSyncing = false;
@@ -27,7 +26,7 @@ class _ShowDevicesState extends State<ShowDevices> {
   Future syncWithUser(String email, String userName) async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      dummyName = prefs.getString("email");
+      documentName = prefs.getString("email");
     });
 
     try {
@@ -35,16 +34,22 @@ class _ShowDevicesState extends State<ShowDevices> {
       setState(() {
         isSyncing = true;
       });
-      
-      await connections.doc(dummyName).set({
-        "details": [
-          {
-            "date": '${date.year}-${date.month}-${date.day}',
-            "email": email,
-            "name": userName
-          }
-        ]
-      });
+
+      QuerySnapshot<Map<String, dynamic>> docSnapshot =
+          await connections.where('_id', isEqualTo: email).get();
+
+      await connections.doc(documentName).set({
+        'details': FieldValue.arrayUnion(
+          [
+            {
+              "date": '${date.year}-${date.month}-${date.day}',
+              "email": email,
+              "name": userName
+            },
+          ],
+        ),
+      }, SetOptions(merge: true));
+
       setState(() {
         isSyncing = false;
       });
@@ -65,8 +70,6 @@ class _ShowDevicesState extends State<ShowDevices> {
       FlutterBluetoothSerial.instance.startDiscovery().listen((value) async {
         // Update the list of Bluetooth map
         _devices.add(value.device.address);
-        // setState(() {
-        // });
       });
     } catch (e) {
       print(e);
@@ -74,7 +77,6 @@ class _ShowDevicesState extends State<ShowDevices> {
   }
 
   Future<void> startDiscovering() async {
-    print("I am clicked here");
     try {
       setState(() {
         isDiscovering = true;
@@ -93,7 +95,6 @@ class _ShowDevicesState extends State<ShowDevices> {
       }
     } catch (e) {
       print(e);
-      print("+++++++++++");
       setState(() {
         isDiscovering = false;
       });
@@ -228,20 +229,25 @@ class _ShowDevicesState extends State<ShowDevices> {
               child: ListView.builder(
                 itemCount: connectedUsers.toList().length,
                 itemBuilder: ((context, index) {
-                  return Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              connectedUsers.toList()[index].profileImage)),
-                      title: Text(connectedUsers.toList()[index].firstName),
-                      trailing: IconButton(
-                        icon: isSyncing
-                            ? CircularProgressIndicator()
-                            : Icon(Icons.sync),
-                        onPressed: () {
-                          syncWithUser(connectedUsers.toList()[index].email,
-                              connectedUsers.toList()[index].firstName);
-                        },
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Card(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  connectedUsers.toList()[index].profileImage)),
+                          title: Text(connectedUsers.toList()[index].firstName),
+                          trailing: IconButton(
+                            icon: isSyncing
+                                ? CircularProgressIndicator()
+                                : Icon(Icons.sync),
+                            onPressed: () {
+                              syncWithUser(connectedUsers.toList()[index].email,
+                                  connectedUsers.toList()[index].firstName);
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   );

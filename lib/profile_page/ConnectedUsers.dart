@@ -9,22 +9,13 @@ class ConnectedUsers extends StatefulWidget {
 
 class _ConnectedUsersState extends State<ConnectedUsers> {
   // variables =========>
-  List<Connection> userStatus = [
-    // UserStatus(
-    //     userName: "User 1",
-    //     selectedStatus: false,
-    //     email: "dilshanthilina53@gmail.com"),
-    // UserStatus(
-    //     userName: "User 2", selectedStatus: false, email: "dummy@gmail.com"),
-    // UserStatus(userName: "User 3", selectedStatus: false, email: ""),
-  ];
+  List<Connection> userStatus = [];
   List<String> _selectedUsesEmails = [];
   bool isSelectAll = false;
   bool type = false;
   String messageForNoUsersSelected = 'Sorry No users have been selected ?';
   String messageWhenUsersAreSelected =
       'Do you want to send emails for all user(s) ?';
-  String actionButtonText = 'Send email';
   // end of the variables
 
   // functions =========>
@@ -139,9 +130,9 @@ class _ConnectedUsersState extends State<ConnectedUsers> {
       appBar: AppBar(
         title: Text("Connected Users .."),
         actions: [
-          MaterialButton(
+          IconButton(
             onPressed: _sendEmailsForUsrs,
-            child: Text(actionButtonText),
+            icon: Icon(Icons.email),
           )
         ],
       ),

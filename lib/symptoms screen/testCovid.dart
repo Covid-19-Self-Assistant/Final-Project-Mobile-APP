@@ -1,9 +1,6 @@
 import 'package:dating_app/symptoms%20screen/symptoms.dart';
 import 'package:dating_app/symptoms%20screen/vaccineStatus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class TestCovid extends StatelessWidget {
   const TestCovid({super.key});
@@ -122,52 +119,9 @@ class TestCovid extends StatelessWidget {
               ]),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               Row(
                 children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.all(16.0),
-                  //       child: Text(
-                  //         "Fever",
-                  //         textAlign: TextAlign.left,
-                  //         style: TextStyle(fontSize: 20),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: Text(
-                  //     "Caught",
-                  //     textAlign: TextAlign.left,
-                  //     style: TextStyle(fontSize: 20),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: Text(
-                  //     "Sor Throat",
-                  //     textAlign: TextAlign.left,
-                  //     style: TextStyle(fontSize: 20),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: Text(
-                  //     "headache",
-                  //     textAlign: TextAlign.left,
-                  //     style: TextStyle(fontSize: 20),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: Text(
-                  //     "Dificult in Breasthing",
-                  //     textAlign: TextAlign.left,
-                  //     style: TextStyle(fontSize: 20),
-                  //   ),
-                  // ),
                   Expanded(
                     child: Container(
                       color: Colors.black12,

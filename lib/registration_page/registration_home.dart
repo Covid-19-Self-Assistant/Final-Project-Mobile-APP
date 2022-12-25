@@ -15,7 +15,6 @@ class RegistrationHome extends StatefulWidget {
 }
 
 class _RegistrationHomeState extends State<RegistrationHome> {
-  final _formKey = GlobalKey<FormState>();
   var _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   bool checkedValue = false;
@@ -342,7 +341,4 @@ class _RegistrationHomeState extends State<RegistrationHome> {
       ),
     );
   }
-
-  // ignore: non_constant_identifier_names
-  FaIcon(googlePlus, {required int size, required Color colors}) {}
 }
