@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'bottom_sheet_text.dart';
-
 class ContactCard extends StatelessWidget {
   ContactCard(
       {required this.imagePath,

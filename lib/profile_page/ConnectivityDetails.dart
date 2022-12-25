@@ -18,7 +18,7 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
 
   bool type = false;
 
-  String? dummyName = "";
+  String? documentName = "";
   final users = FirebaseFirestore.instance.collection('connections');
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -27,10 +27,10 @@ class _ConnectivityDetailsState extends State<ConnectivityDetails> {
     try {
       final SharedPreferences prefs = await _prefs;
       setState(() {
-        dummyName = prefs.getString("email");
+        documentName = prefs.getString("email");
       });
       DocumentSnapshot<Map<String, dynamic>> status =
-          await users.doc(dummyName).get();
+          await users.doc(documentName).get();
       Map<String, dynamic>? data = status.data();
       if (data != null) {
         List details = data['details'];

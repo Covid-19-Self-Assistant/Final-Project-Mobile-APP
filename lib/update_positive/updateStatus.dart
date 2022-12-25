@@ -18,26 +18,26 @@ class _StateChangerState extends State<StateChanger> {
   bool value = false;
   bool isLoading = false;
 
-  String? dummyName = "";
+  String? documentName = "";
   final users = FirebaseFirestore.instance.collection('users');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   
 
   Future changeCovidStatus(bool value) async {
-    return users.doc(dummyName).update({"covidStatus": value});
+    return users.doc(documentName).update({"covidStatus": value});
   }
 
   Future getTheUsesCovidStatus() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      dummyName = prefs.getString("email");
+      documentName = prefs.getString("email");
     });
     try {
       setState(() {
         isLoading = true;
       });
       DocumentSnapshot<Map<String, dynamic>> status =
-          await users.doc(dummyName).get();
+          await users.doc(documentName).get();
       setState(() {
         isLoading = false;
       });

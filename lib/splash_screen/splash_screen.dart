@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:dating_app/get_started/get_started_home.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

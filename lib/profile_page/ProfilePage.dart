@@ -21,8 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String profileImage = "";
   String userName = "";
 
-  // TODO: get the user from the firestore
-  String? dummyName = "";
+  String? documentName = "";
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -32,14 +31,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Future getUserDetails() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      dummyName = prefs.getString("email");
+      documentName = prefs.getString("email");
     });
     try {
       setState(() {
         isProfileLoading = true;
       });
       DocumentSnapshot<Map<String, dynamic>> status =
-          await users.doc(dummyName).get();
+          await users.doc(documentName).get();
       Map<String, dynamic>? data = status.data();
       setState(() {
         isProfileLoading = false;
@@ -60,7 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // TODO: get the profile details from the api
 
   Future saveImage(context) async {
     try {
@@ -74,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
           });
           await storageReference.putFile(File(_image!.path));
           String imageUrl = await storageReference.getDownloadURL();
-          await users.doc(dummyName).update({"profileImage": imageUrl});
+          await users.doc(documentName).update({"profileImage": imageUrl});
           setState(() {
             isImagesPicked = false;
             profileImage = imageUrl;
@@ -159,6 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SharedPreferences.getInstance();
                     final SharedPreferences prefs = await _prefs;
                     prefs.remove("isLogin");
+                    prefs.remove("email");
                     Navigator.pushNamed(context, '/login');
                   },
                   child: Text("Log out"),

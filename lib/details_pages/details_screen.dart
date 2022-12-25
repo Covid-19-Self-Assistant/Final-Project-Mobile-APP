@@ -376,16 +376,3 @@ class DetailsTile extends StatelessWidget {
         ));
   }
 }
-
-// class StatusBar extends StatelessWidget {
-//   const StatusBar({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     bool isGloble = false;
-//     bool isLocal = true;
-//     return 
-//   }
-// }
