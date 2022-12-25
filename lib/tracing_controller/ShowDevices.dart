@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dating_app/components/constants.dart';
 import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -97,6 +96,12 @@ class _ShowDevicesState extends State<ShowDevices> {
         var user = matchedUsers.docs[i].data();
         int index = connectedUsers
             .indexWhere((element) => element.email == user['email']);
+        final SharedPreferences prefs = await _prefs;
+          var myEmail = prefs.getString("email");
+          if(myEmail == user['email']){
+            connectedUsers.removeAt(i);
+          }
+        
         if (index == -1) {
           connectedUsers.add(ConnectedUser(
               email: user['email'],

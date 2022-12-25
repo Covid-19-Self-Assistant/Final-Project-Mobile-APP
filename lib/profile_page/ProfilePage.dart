@@ -26,7 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final users = FirebaseFirestore.instance.collection('users');
-  final storageReference = FirebaseStorage.instance.ref().child('images');
 
   Future getUserDetails() async {
     final SharedPreferences prefs = await _prefs;
@@ -69,6 +68,11 @@ class _ProfilePageState extends State<ProfilePage> {
           setState(() {
             isProfileLoading = true;
           });
+          final SharedPreferences prefs = await _prefs;
+
+          final storageReference =
+              FirebaseStorage.instance.ref().child(prefs.getString("email")!);
+
           await storageReference.putFile(File(_image!.path));
           String imageUrl = await storageReference.getDownloadURL();
           await users.doc(documentName).update({"profileImage": imageUrl});
