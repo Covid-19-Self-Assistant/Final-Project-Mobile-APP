@@ -118,6 +118,25 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text("Profile"),
         backgroundColor: Colors.blue[900],
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.coronavirus,
+              color: getCovidColorCode(),
+            ),
+          ),
+          IconButton(
+              onPressed: () async {
+                final Future<SharedPreferences> _prefs =
+                    SharedPreferences.getInstance();
+                final SharedPreferences prefs = await _prefs;
+                prefs.remove("isLogin");
+                prefs.remove("email");
+                Navigator.pushNamed(context, '/login');
+              },
+              icon: Icon(Icons.offline_bolt))
+        ],
       ),
       body: SingleChildScrollView(
         child: LayoutBuilder(
@@ -147,38 +166,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   userName.toString(),
                   style: TextStyle(
+                    color: getCovidColorCode(),
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Icon(
-                  Icons.coronavirus,
-                  color: getCovidColorCode(),
+                SizedBox(
+                  height: 50,
                 ),
-                Text(
-                  "covid status",
-                  style: TextStyle(
-                    color: getCovidColorCode(),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final Future<SharedPreferences> _prefs =
-                        SharedPreferences.getInstance();
-                    final SharedPreferences prefs = await _prefs;
-                    prefs.remove("isLogin");
-                    prefs.remove("email");
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: Text(
-                    "Log out",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                profileSections("Edit page", ''),
+                profileSections("Edit Details", ''),
                 profileSections("Connection Details", 'connectivityDetails'),
+                profileSections("Terms and Conditions", 'terms'),
+                SizedBox(
+                  height: 50,
+                ),
               ],
             );
           },

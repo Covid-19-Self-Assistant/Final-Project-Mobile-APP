@@ -4,6 +4,7 @@ import 'package:dating_app/login/login_home.dart';
 import 'package:dating_app/profile_page/ConnectivityDetails.dart';
 import 'package:dating_app/profile_page/ProfilePage.dart';
 import 'package:dating_app/profile_page/ConnectedUsers.dart';
+import 'package:dating_app/profile_page/Terms.dart';
 import 'package:dating_app/splash_screen/splash_screen.dart';
 import 'package:dating_app/symptoms%20screen/symptoms.dart';
 import 'package:dating_app/tracing_controller/ShowDevices.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: {
         '/details': (context) => DetailsPage(),
+        '/terms': (context) => Terms(),
         '/connectivityDetails': (context) => ConnectivityDetails(),
         '/login': (context) => LoginFormValidation(),
         '/nearByInt': (context) => ShowDevices(),
