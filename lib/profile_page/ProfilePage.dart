@@ -54,6 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isProfileLoading = false;
       });
+      // ignore: todo
       // TODO: error handling
     }
   }
