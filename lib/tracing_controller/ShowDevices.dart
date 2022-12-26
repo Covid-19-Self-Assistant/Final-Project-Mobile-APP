@@ -198,7 +198,7 @@ class _ShowDevicesState extends State<ShowDevices> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "START TRACKING",
+                    "START TRACING",
                   ),
                   Icon(
                     Icons.cloud_sync_sharp,
