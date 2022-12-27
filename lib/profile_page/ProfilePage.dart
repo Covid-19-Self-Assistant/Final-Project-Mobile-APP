@@ -135,55 +135,61 @@ class _ProfilePageState extends State<ProfilePage> {
                 prefs.remove("isLogin");
                 prefs.remove("email");
                 Navigator.pushNamed(context, '/login');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Logged out successfully."),
+                ));
               },
               icon: Icon(Icons.offline_bolt))
         ],
       ),
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return Column(
-              children: [
-                SizedBox(height: 20),
-                Container(
-                    width: 200,
-                    height: 200,
-                    child: isProfileLoading
-                        ? CircularProgressIndicator()
-                        : profileImage.isEmpty
-                            ? CircleAvatar(
-                                backgroundColor: Colors.deepPurple,
-                              )
-                            : CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  profileImage,
-                                ),
-                              )),
-                MaterialButton(
-                  onPressed: () => saveImage(context),
-                  child: Icon(Icons.cloud_upload),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  userName.toString(),
-                  style: TextStyle(
-                    color: getCovidColorCode(),
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+      body: RefreshIndicator(
+        onRefresh: () => getUserDetails(),
+        child: SingleChildScrollView(
+          child: LayoutBuilder(
+            builder: (context, constraint) {
+              return Column(
+                children: [
+                  SizedBox(height: 20),
+                  Container(
+                      width: 200,
+                      height: 200,
+                      child: isProfileLoading
+                          ? CircularProgressIndicator()
+                          : profileImage.isEmpty
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.blue[900],
+                                )
+                              : CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    profileImage,
+                                  ),
+                                )),
+                  MaterialButton(
+                    onPressed: () => saveImage(context),
+                    child: Icon(Icons.cloud_upload),
                   ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                profileSections("Edit Details", ''),
-                profileSections("Connection Details", 'connectivityDetails'),
-                profileSections("Terms and Conditions", 'terms'),
-                SizedBox(
-                  height: 50,
-                ),
-              ],
-            );
-          },
+                  SizedBox(height: 20),
+                  Text(
+                    userName.toString(),
+                    style: TextStyle(
+                      color: getCovidColorCode(),
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  profileSections("Edit Details", 'edit-profile'),
+                  profileSections("Connection Details", 'connectivityDetails'),
+                  profileSections("Terms and Conditions", 'terms'),
+                  SizedBox(
+                    height: 50,
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

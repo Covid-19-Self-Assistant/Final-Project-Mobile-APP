@@ -32,7 +32,7 @@ class PickImageFromGalleryOrCamera {
                     child: Text(
                       'Which option your prefered',
                       style: TextStyle(
-                          color: Colors.purple, fontWeight: FontWeight.bold),
+                          color: Colors.blue[900], fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
