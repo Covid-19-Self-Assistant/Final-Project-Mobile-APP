@@ -89,7 +89,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/nearByInt');
+                    Navigator.pushNamed(context, '/agreement');
                   },
                   icon: Icon(Icons.connect_without_contact_sharp),
                 ),

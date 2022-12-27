@@ -26,9 +26,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
   late TextEditingController _email = TextEditingController();
   late TextEditingController _password = TextEditingController();
   late TextEditingController _deviceInfo = TextEditingController();
-  TextEditingController _date = TextEditingController();
   bool isLoading = false;
-
 
   void _getDeviceInformations() async {
     String? address = await FlutterBluetoothSerial.instance.address;
@@ -307,7 +305,8 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                                   'birthDay': birthday.text,
                                   'device': _deviceInfo.text,
                                   'covidStatus': false,
-                                  'profileImage': ''
+                                  'profileImage': '',
+                                  'isAgreed': false
                                 });
 
                                 Navigator.of(context).pushAndRemoveUntil(

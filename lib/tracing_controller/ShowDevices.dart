@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -108,6 +107,7 @@ class _ShowDevicesState extends State<ShowDevices> {
       setState(() {
         isDiscovering = false;
       });
+      final SharedPreferences prefs = await _prefs;
 
       for (var i = 0; i < matchedUsers.docs.length - 1; i++) {
         var user = matchedUsers.docs[i].data();
@@ -115,10 +115,9 @@ class _ShowDevicesState extends State<ShowDevices> {
         int index = connectedUsers
             .indexWhere((element) => element.email == user['email']);
 
-        final SharedPreferences prefs = await _prefs;
         var myEmail = prefs.getString("email");
         if (myEmail == user['email']) {
-          connectedUsers.removeAt(i);
+          continue;
         }
 
         if (index == -1) {
@@ -162,7 +161,6 @@ class _ShowDevicesState extends State<ShowDevices> {
             ),
           ),
         ],
-        
         title: Text(
           'Covid 19 Self Assistance',
           style: TextStyle(
@@ -171,7 +169,7 @@ class _ShowDevicesState extends State<ShowDevices> {
             fontSize: 14.0,
           ),
         ),
-        backgroundColor: Colors.deepPurple[900],
+        backgroundColor: Colors.blue[900],
       ),
       body: isScanning
           ? Center(
@@ -191,7 +189,7 @@ class _ShowDevicesState extends State<ShowDevices> {
                       height: 100.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.deepPurple[500],
+                        color: Colors.blue[900],
                         borderRadius: BorderRadius.circular(20.0),
                         boxShadow: [
                           BoxShadow(
@@ -259,6 +257,14 @@ class _ShowDevicesState extends State<ShowDevices> {
                           child: Card(
                             child: ListTile(
                               leading: CircleAvatar(
+                                child: connectedUsers
+                                            .toList()[index]
+                                            .profileImage ==
+                                        ""
+                                    ? Text(connectedUsers
+                                        .toList()[index]
+                                        .firstName[0])
+                                    : null,
                                 backgroundImage: connectedUsers
                                             .toList()[index]
                                             .profileImage !=
