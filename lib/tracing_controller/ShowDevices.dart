@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/details_pages/details_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class _ShowDevicesState extends State<ShowDevices> {
   final connections = FirebaseFirestore.instance.collection('connections');
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSyncing = false;
+  bool isScanning = false;
   int sycingNumber = 0;
 
   Future syncWithUser(String email, String userName, int index) async {
@@ -59,7 +62,6 @@ class _ShowDevicesState extends State<ShowDevices> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Unable to sync with the user. Please try again"),
       ));
-      print(e);
       setState(() {
         isSyncing = false;
         sycingNumber = 0;
@@ -68,17 +70,30 @@ class _ShowDevicesState extends State<ShowDevices> {
   }
 
   var type = false;
+  Stream<BluetoothDiscoveryResult> stream =
+      FlutterBluetoothSerial.instance.startDiscovery();
 
-  Future<void> _startScan() async {
+  void _startScan() {
     _devices.clear();
 
     try {
-      FlutterBluetoothSerial.instance.startDiscovery().listen((value) async {
+      setState(() {
+        isScanning = true;
+      });
+      stream.listen((value) {
         // Update the list of Bluetooth map
         _devices.add(value.device.address);
+        setState(() {
+          isScanning = false;
+        });
       });
     } catch (e) {
-      print(e);
+      setState(() {
+        isScanning = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Unable to scanning at the movement. Please try again"),
+      ));
     }
   }
 
@@ -87,21 +102,25 @@ class _ShowDevicesState extends State<ShowDevices> {
       setState(() {
         isDiscovering = true;
       });
+      _devices.add(" ");
       QuerySnapshot<Map<String, dynamic>> matchedUsers =
           await users.where("device", whereIn: _devices.toList()).get();
       setState(() {
         isDiscovering = false;
       });
-      for (var i = 0; i < matchedUsers.docs.length; i++) {
+
+      for (var i = 0; i < matchedUsers.docs.length - 1; i++) {
         var user = matchedUsers.docs[i].data();
+
         int index = connectedUsers
             .indexWhere((element) => element.email == user['email']);
+
         final SharedPreferences prefs = await _prefs;
-          var myEmail = prefs.getString("email");
-          if(myEmail == user['email']){
-            connectedUsers.removeAt(i);
-          }
-        
+        var myEmail = prefs.getString("email");
+        if (myEmail == user['email']) {
+          connectedUsers.removeAt(i);
+        }
+
         if (index == -1) {
           connectedUsers.add(ConnectedUser(
               email: user['email'],
@@ -110,11 +129,19 @@ class _ShowDevicesState extends State<ShowDevices> {
         }
       }
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Something went wrong. $e'),
+      ));
       setState(() {
         isDiscovering = false;
       });
     }
+  }
+
+  cancelLoading() {
+    setState(() {
+      isScanning = false;
+    });
   }
 
   @override
@@ -126,129 +153,143 @@ class _ShowDevicesState extends State<ShowDevices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          color: Colors.deepPurple,
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => DetailsPage()));
-          },
-        ),
-        centerTitle: true,
-        title: Text(
-          'Covid 19 Self Assistance',
-          style: TextStyle(
-            color: Colors.deepPurple[800],
-            fontWeight: FontWeight.bold,
-            fontSize: 28.0,
-          ),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 25.0,
-                right: 25.0,
-                bottom: 10.0,
-                top: 30.0,
-              ),
-              child: Container(
-                height: 100.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple[500],
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 4.0,
-                      spreadRadius: 0.0,
-                      offset:
-                          Offset(2.0, 2.0), // shadow direction: bottom right
-                    )
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage('assets/images/corona.png'),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        'Your Contact Traces',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 21.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          MaterialButton(
-              onPressed: startDiscovering,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "START TRACING",
-                  ),
-                  Icon(
-                    Icons.cloud_sync_sharp,
-                    size: 50,
-                  ),
-                ],
-              )),
-          SizedBox(
-            height: 20,
-          ),
-          if (isDiscovering) CircularProgressIndicator(),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0),
-              child: ListView.builder(
-                itemCount: connectedUsers.toList().length,
-                itemBuilder: ((context, index) {
-                  return Center(
-                    child: Card(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                connectedUsers.toList()[index].profileImage)),
-                        title: Text(connectedUsers.toList()[index].firstName),
-                        trailing: IconButton(
-                          icon: isSyncing && sycingNumber == index
-                              ? CircularProgressIndicator()
-                              : Icon(Icons.sync),
-                          onPressed: () {
-                            syncWithUser(
-                                connectedUsers.toList()[index].email,
-                                connectedUsers.toList()[index].firstName,
-                                index);
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
+        actions: [
+          IconButton(
+            onPressed: cancelLoading,
+            icon: Icon(
+              Icons.cancel,
+              color: Colors.white,
             ),
           ),
         ],
+        
+        title: Text(
+          'Covid 19 Self Assistance',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple[900],
       ),
+      body: isScanning
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 25.0,
+                      right: 25.0,
+                      bottom: 10.0,
+                      top: 30.0,
+                    ),
+                    child: Container(
+                      height: 100.0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[500],
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            blurRadius: 4.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(
+                                2.0, 2.0), // shadow direction: bottom right
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Image(
+                              image: AssetImage('assets/images/corona.png'),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              'Your Contact Traces',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 21.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                MaterialButton(
+                    onPressed: startDiscovering,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "START TRACING",
+                        ),
+                        Icon(
+                          Icons.cloud_sync_sharp,
+                          size: 50,
+                        ),
+                      ],
+                    )),
+                SizedBox(
+                  height: 20,
+                ),
+                if (isDiscovering) CircularProgressIndicator(),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: ListView.builder(
+                      itemCount: connectedUsers.toList().length,
+                      itemBuilder: ((context, index) {
+                        return Center(
+                          child: Card(
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: connectedUsers
+                                            .toList()[index]
+                                            .profileImage !=
+                                        ""
+                                    ? NetworkImage(connectedUsers
+                                        .toList()[index]
+                                        .profileImage)
+                                    : null,
+                              ),
+                              title: Text(
+                                  connectedUsers.toList()[index].firstName),
+                              trailing: IconButton(
+                                icon: isSyncing && sycingNumber == index
+                                    ? CircularProgressIndicator()
+                                    : Icon(Icons.sync),
+                                onPressed: () {
+                                  syncWithUser(
+                                      connectedUsers.toList()[index].email,
+                                      connectedUsers.toList()[index].firstName,
+                                      index);
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
