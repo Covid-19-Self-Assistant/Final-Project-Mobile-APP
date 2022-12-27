@@ -59,12 +59,9 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool tracker = true;
-    bool symptoms = false;
     Color trackerColor = Colors.white;
     Color symptomsColor = Colors.amber;
     return FutureBuilder(
-      
       future: _future,
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -90,21 +87,18 @@ class _DetailsPageState extends State<DetailsPage> {
                   onPressed: () {},
                   icon: Icon(Icons.home),
                 ),
-
                 IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/nearByInt');
                   },
                   icon: Icon(Icons.connect_without_contact_sharp),
                 ),
-
                 IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/qrScanner');
                   },
                   icon: Icon(Icons.qr_code),
                 ),
-
                 IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/stateChange');
@@ -115,20 +109,16 @@ class _DetailsPageState extends State<DetailsPage> {
                     Icons.health_and_safety,
                   ),
                 ),
-
                 IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/profile');
                   },
                   icon: Icon(Icons.person),
                 ),
-
-                
               ],
             ),
           ),
           body: SingleChildScrollView(
-            
             child: Container(
               child: Column(
                 children: [
@@ -162,8 +152,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      tracker = true;
-                                      symptoms = false;
                                       trackerColor = Colors.pink;
                                       symptomsColor = Colors.amber;
                                     });
@@ -215,7 +203,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         scrollDirection: Axis.horizontal,
                         children: [
                           Container(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            padding:
+                                const EdgeInsets.only(left: 20, right: 20),
                             child: GestureDetector(
                               child: Text(
                                 "Country",
@@ -227,19 +216,21 @@ class _DetailsPageState extends State<DetailsPage> {
                                 setState(() {
                                   isLocal = true;
                                   isGloble = false;
-                                  conform =
-                                      localData['local_total_cases'].toString();
-                                  active =
-                                      localData['local_active_cases'].toString();
+                                  conform = localData['local_total_cases']
+                                      .toString();
+                                  active = localData['local_active_cases']
+                                      .toString();
                                   recovered =
                                       localData['local_recovered'].toString();
-                                  death = localData['local_deaths'].toString();
+                                  death =
+                                      localData['local_deaths'].toString();
                                 });
                               },
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.only(left: 20, right: 200),
+                            padding:
+                                const EdgeInsets.only(left: 20, right: 200),
                             child: GestureDetector(
                               child: Text(
                                 "Worldwide",
@@ -252,13 +243,14 @@ class _DetailsPageState extends State<DetailsPage> {
                                   print("Check");
                                   isGloble = true;
                                   isLocal = false;
-                                  conform =
-                                      globalData['global_total_cases'].toString();
+                                  conform = globalData['global_total_cases']
+                                      .toString();
                                   active = globalData['global_active_cases']
                                       .toString();
-                                  recovered =
-                                      globalData['global_recovered'].toString();
-                                  death = globalData['global_deaths'].toString();
+                                  recovered = globalData['global_recovered']
+                                      .toString();
+                                  death =
+                                      globalData['global_deaths'].toString();
                                 });
                               },
                             ),
