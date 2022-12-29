@@ -14,145 +14,145 @@ class SpreadScreen extends StatelessWidget {
 
     return Scaffold(
         body: SingleChildScrollView(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 280,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Color.fromARGB(255, 51, 131, 205),
-                      Color(0xFF11249F),
-                    ],
-                  ),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/images/virus.png"),
-                    fit: BoxFit.fitWidth,
-                  )),
-              child: SafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Text(
-                            "All you need \nis stay at home.",
-                            style: TextStyle(
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white60),
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const TestCovid(),
-                                  ),
-                                );
-                              },
-                              child: Text('Self  Check >'),
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.blueGrey),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image(
-                      image: AssetImage(
-                        "assets/images/doctor.png",
-                      ),
-                      fit: BoxFit.fitHeight,
-                      alignment: Alignment.bottomRight,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Symptoms",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: _symptomsCards
-                          .map((card) => SymptomsCard(
-                                image: card.image,
-                                title: card.title,
-                              ))
-                          .toList(),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Prevention",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PreventCard(
-                    text:
-                        "Since the start of the coronavirus outbreak some places have fully embraced wearing facemarks.",
-                    image: "assets/images/wear_mask.png",
-                    title: "Wear Face Mask",
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PreventCard(
-                    text:
-                        "Since the start of the coronavirus outbreak some places have fully embraced wearing facemarks",
-                    image: "assets/images/wash_hands.png",
-                    title: "Wash your Hands",
-                  ),
-                  // SizedBox(
-                  //   height: 50,
-                  // ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+          Widget>[
+        Container(
+          height: 280,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color.fromARGB(255, 51, 131, 205),
+                  Color(0xFF11249F),
                 ],
               ),
+              image: const DecorationImage(
+                image: AssetImage("assets/images/virus.png"),
+                fit: BoxFit.fitWidth,
+              )),
+          child: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 40,
+                ),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "All you need is stay at home.",
+                        style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      //Expanded(
+                      //child:
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const TestCovid(),
+                            ),
+                          );
+                        },
+                        child: Text('Self  Check >'),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.blueGrey),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // ),
+                    ],
+                  ),
+                ),
+                Image(
+                  image: AssetImage(
+                    "assets/images/doctor.png",
+                  ),
+                  fit: BoxFit.fitHeight,
+                  alignment: Alignment.bottomRight,
+                ),
+              ],
             ),
-          ]),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Symptoms",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: _symptomsCards
+                      .map((card) => SymptomsCard(
+                            image: card.image,
+                            title: card.title,
+                          ))
+                      .toList(),
+                ),
+              ),
+
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Prevention",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              PreventCard(
+                text:
+                    "Since the start of the coronavirus outbreak some places have fully embraced wearing facemarks.",
+                image: "assets/images/wear_mask.png",
+                title: "Wear Face Mask",
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              PreventCard(
+                text:
+                    "Since the start of the coronavirus outbreak some places have fully embraced wearing facemarks",
+                image: "assets/images/wash_hands.png",
+                title: "Wash your Hands",
+              ),
+              // SizedBox(
+              //   height: 50,
+              // ),
+            ],
+          ),
+        ),
+      ]),
     ));
   }
 }
@@ -246,8 +246,8 @@ class SymptomsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(7),
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white,
