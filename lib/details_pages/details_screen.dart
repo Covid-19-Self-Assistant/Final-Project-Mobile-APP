@@ -79,7 +79,7 @@ class _DetailsPageState extends State<DetailsPage> {
         return Scaffold(
           bottomNavigationBar: Container(
             height: 70,
-            color: Color.fromARGB(255, 20, 207, 221),
+            color: Colors.blue[900],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -124,9 +124,14 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Padding(padding: EdgeInsets.only(top: 20)),
                   Center(
-                    child: Image.asset(
-                      "assets/images/Banner.png",
-                      width: double.infinity,
+                    child: GestureDetector(
+                      child: Image.asset(
+                        "assets/images/Banner.png",
+                        width: double.infinity,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/symptoms');
+                      },
                     ),
                   ),
                   Padding(
@@ -203,8 +208,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         scrollDirection: Axis.horizontal,
                         children: [
                           Container(
-                            padding:
-                                const EdgeInsets.only(left: 20, right: 20),
+                            padding: const EdgeInsets.only(left: 20, right: 20),
                             child: GestureDetector(
                               child: Text(
                                 "Country",
@@ -216,14 +220,13 @@ class _DetailsPageState extends State<DetailsPage> {
                                 setState(() {
                                   isLocal = true;
                                   isGloble = false;
-                                  conform = localData['local_total_cases']
-                                      .toString();
+                                  conform =
+                                      localData['local_total_cases'].toString();
                                   active = localData['local_active_cases']
                                       .toString();
                                   recovered =
                                       localData['local_recovered'].toString();
-                                  death =
-                                      localData['local_deaths'].toString();
+                                  death = localData['local_deaths'].toString();
                                 });
                               },
                             ),
@@ -247,8 +250,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                       .toString();
                                   active = globalData['global_active_cases']
                                       .toString();
-                                  recovered = globalData['global_recovered']
-                                      .toString();
+                                  recovered =
+                                      globalData['global_recovered'].toString();
                                   death =
                                       globalData['global_deaths'].toString();
                                 });
@@ -268,7 +271,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             size: size,
                             title: "Confirmend",
                             count: conform,
-                            color: Color(0xff7477EC)),
+                            color: Color.fromARGB(255, 85, 224, 178)),
                         SizedBox(
                           width: 15,
                         ),
@@ -276,7 +279,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             size: size,
                             title: "Active",
                             count: active,
-                            color: Color(0xff7477EC)),
+                            color: Color.fromARGB(212, 230, 65, 65)),
                       ],
                     ),
                   ),
@@ -291,7 +294,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             size: size,
                             title: "Recovered",
                             count: recovered,
-                            color: Color(0xff7477EC)),
+                            color: Color.fromARGB(255, 50, 224, 44)),
                         SizedBox(
                           width: 15,
                         ),
@@ -299,7 +302,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             size: size,
                             title: "Deaths",
                             count: death,
-                            color: Color(0xff7477EC)),
+                            color: Color.fromARGB(255, 134, 9, 9)),
                       ],
                     ),
                   ),
