@@ -36,9 +36,9 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: Text("Login Page"),
+        title: Text("Login Page", textAlign: TextAlign.center),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -95,14 +95,15 @@ class _LoginFormValidationState extends State<LoginFormValidation> {
                 },
                 child: Text(
                   'Forgot Password',
-                  style: TextStyle(color: Colors.redAccent[400], fontSize: 15),
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 58, 149, 235), fontSize: 15),
                 ),
               ),
               Container(
                 height: 50,
                 width: 250,
                 decoration: BoxDecoration(
-                    color: Colors.redAccent[400],
+                    color: Color.fromARGB(255, 11, 69, 155),
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
                   onPressed: () async {
