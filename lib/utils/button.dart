@@ -2,7 +2,7 @@ import 'package:dating_app/login/login_home.dart';
 import 'package:flutter/material.dart';
 
 class Button {
-  static RoseButton(BuildContext context , String label , Widget widget ) {
+  static RoseButton(BuildContext context, String label, Widget widget) {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
@@ -14,9 +14,8 @@ class Button {
       ),
       style: ElevatedButton.styleFrom(
           onPrimary: Colors.white,
-          primary: Colors.redAccent[400],
+          primary: Colors.blue[900],
           padding: EdgeInsets.all(20.0),
-          
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0))),
     );
