@@ -189,9 +189,12 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   ),
                   SizedBox(height: 15.0),
-                  MaterialButton(
-                    onPressed: _getDeviceInformations,
-                    child: Text('Device Infor'),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _getDeviceInformations,
+                      child:
+                          Text('Please Click this to a get Device Information'),
+                    ),
                   ),
 
                   if (_deviceInfo.text != "")
@@ -261,7 +264,7 @@ class _RegistrationHomeState extends State<RegistrationHome> {
                     child: Container(
                       // decoration: ThemeHelper().buttonBoxDecoration(context),
                       decoration: BoxDecoration(
-                          color: Colors.redAccent[400],
+                          color: Colors.blue[900],
                           borderRadius: BorderRadius.circular(20)),
                       child: ElevatedButton(
                           style: ThemeHelper().buttonStyle(),
