@@ -109,7 +109,7 @@ class _ShowDevicesState extends State<ShowDevices> {
       });
       final SharedPreferences prefs = await _prefs;
 
-      for (var i = 0; i < matchedUsers.docs.length - 1; i++) {
+      for (var i = 0; i < matchedUsers.docs.length; i++) {
         var user = matchedUsers.docs[i].data();
 
         int index = connectedUsers
