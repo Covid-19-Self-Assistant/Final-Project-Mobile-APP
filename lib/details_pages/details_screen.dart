@@ -217,6 +217,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   child: Text(
                                     "Country",
                                     style: TextStyle(
+                                      // backgroundColor: Colors.white24,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 19,
                                     ),

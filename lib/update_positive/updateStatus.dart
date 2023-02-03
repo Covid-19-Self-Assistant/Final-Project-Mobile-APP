@@ -80,6 +80,24 @@ class _StateChangerState extends State<StateChanger> {
                           : 'assets/images/negative.PNG',
                       height: 300,
                     ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      // margin: EdgeInsets.symmetric(horizontal: 15),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          "Update here only after you know for sure that you are a corona patient.",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent),
+                        ),
+                      ),
+                    ),
                     Spacer(),
                     buildPlatforms(),
                     const SizedBox(height: 12),
