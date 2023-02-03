@@ -74,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
           final storageReference =
               FirebaseStorage.instance.ref().child(prefs.getString("email")!);
 
-          await storageReference.putFile(File(_image!.path));
+          await storageReference.putFile(File(_image.path));
           String imageUrl = await storageReference.getDownloadURL();
           await users.doc(documentName).update({"profileImage": imageUrl});
           setState(() {
