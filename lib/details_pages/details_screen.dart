@@ -119,194 +119,207 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
           body: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(padding: EdgeInsets.only(top: 20)),
-                  Center(
-                    child: GestureDetector(
-                      child: Image.asset(
-                        "assets/images/Banner.png",
-                        width: double.infinity,
+            child: SafeArea(
+              child: Container(
+                child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    Center(
+                      child: GestureDetector(
+                        child: Image.asset(
+                          "assets/images/Banner.png",
+                          width: double.infinity,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/symptoms');
+                        },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/symptoms');
-                      },
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(15),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 35,
+                                margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  color: trackerColor,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        trackerColor = Colors.pink;
+                                        symptomsColor = Colors.amber;
+                                      });
+                                    },
+                                    child: Text(
+                                      "Tracker",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                height: 35,
+                                margin: EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  color: symptomsColor,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/symptoms');
+                                    },
+                                    child: Text(
+                                      "Symptoms",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                        width: double.infinity,
+                        height: 20,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: GestureDetector(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 60),
+                                  child: Text(
+                                    "Country",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 19,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    isLocal = true;
+                                    isGloble = false;
+                                    conform = localData['local_total_cases']
+                                        .toString();
+                                    active = localData['local_active_cases']
+                                        .toString();
+                                    recovered =
+                                        localData['local_recovered'].toString();
+                                    death =
+                                        localData['local_deaths'].toString();
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 200),
+                              child: GestureDetector(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 70),
+                                  child: Text(
+                                    "Worldwide",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 19,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    print("Check");
+                                    isGloble = true;
+                                    isLocal = false;
+                                    conform = globalData['global_total_cases']
+                                        .toString();
+                                    active = globalData['global_active_cases']
+                                        .toString();
+                                    recovered = globalData['global_recovered']
+                                        .toString();
+                                    death =
+                                        globalData['global_deaths'].toString();
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Container(
-                              height: 35,
-                              margin: EdgeInsets.only(left: 10),
-                              decoration: BoxDecoration(
-                                color: trackerColor,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      trackerColor = Colors.pink;
-                                      symptomsColor = Colors.amber;
-                                    });
-                                  },
-                                  child: Text(
-                                    "Tracker",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          DetailsTile(
+                              size: size,
+                              title: "Confirmend",
+                              count: conform,
+                              color: Color.fromARGB(255, 85, 224, 178)),
+                          SizedBox(
+                            width: 15,
                           ),
-                          Expanded(
-                            child: Container(
-                              height: 35,
-                              margin: EdgeInsets.only(left: 10, right: 10),
-                              decoration: BoxDecoration(
-                                color: symptomsColor,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, '/symptoms');
-                                  },
-                                  child: Text(
-                                    "Symptoms",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          DetailsTile(
+                              size: size,
+                              title: "Active",
+                              count: active,
+                              color: Color.fromARGB(212, 230, 65, 65)),
+                          // color: Color(0xe70),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                      width: double.infinity,
+                    SizedBox(
                       height: 20,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: GestureDetector(
-                              child: Text(
-                                "Country",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  isLocal = true;
-                                  isGloble = false;
-                                  conform =
-                                      localData['local_total_cases'].toString();
-                                  active = localData['local_active_cases']
-                                      .toString();
-                                  recovered =
-                                      localData['local_recovered'].toString();
-                                  death = localData['local_deaths'].toString();
-                                });
-                              },
-                            ),
+                          DetailsTile(
+                              size: size,
+                              title: "Recovered",
+                              count: recovered,
+                              color: Color.fromARGB(255, 50, 224, 44)),
+                          SizedBox(
+                            width: 15,
                           ),
-                          Container(
-                            padding:
-                                const EdgeInsets.only(left: 20, right: 200),
-                            child: GestureDetector(
-                              child: Text(
-                                "Worldwide",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  print("Check");
-                                  isGloble = true;
-                                  isLocal = false;
-                                  conform = globalData['global_total_cases']
-                                      .toString();
-                                  active = globalData['global_active_cases']
-                                      .toString();
-                                  recovered =
-                                      globalData['global_recovered'].toString();
-                                  death =
-                                      globalData['global_deaths'].toString();
-                                });
-                              },
-                            ),
-                          ),
+                          DetailsTile(
+                              size: size,
+                              title: "Deaths",
+                              count: death,
+                              color: Color.fromARGB(255, 134, 9, 9)),
                         ],
-                      )),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        DetailsTile(
-                            size: size,
-                            title: "Confirmend",
-                            count: conform,
-                            color: Color.fromARGB(255, 85, 224, 178)),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        DetailsTile(
-                            size: size,
-                            title: "Active",
-                            count: active,
-                            color: Color.fromARGB(212, 230, 65, 65)),
-                      ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        DetailsTile(
-                            size: size,
-                            title: "Recovered",
-                            count: recovered,
-                            color: Color.fromARGB(255, 50, 224, 44)),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        DetailsTile(
-                            size: size,
-                            title: "Deaths",
-                            count: death,
-                            color: Color.fromARGB(255, 134, 9, 9)),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
