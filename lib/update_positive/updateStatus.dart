@@ -62,29 +62,31 @@ class _StateChangerState extends State<StateChanger> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: isLoading
-            ? CircularProgressIndicator()
-            : Column(
-                children: [
-                  Spacer(),
-                  Image.asset(
-                    // value ? 'assets/images/on.png' : 'assets/images/off.png',
-                    value
-                        ? 'assets/images/positive.PNG'
-                        : 'assets/images/negative.PNG',
-                    height: 300,
-                  ),
-                  Spacer(),
-                  buildPlatforms(),
-                  const SizedBox(height: 12),
-                  const SizedBox(height: 12),
-                ],
-              ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: isLoading
+              ? CircularProgressIndicator()
+              : Column(
+                  children: [
+                    Spacer(),
+                    Image.asset(
+                      // value ? 'assets/images/on.png' : 'assets/images/off.png',
+                      value
+                          ? 'assets/images/positive.PNG'
+                          : 'assets/images/negative.PNG',
+                      height: 300,
+                    ),
+                    Spacer(),
+                    buildPlatforms(),
+                    const SizedBox(height: 12),
+                    const SizedBox(height: 12),
+                  ],
+                ),
+        ),
       ),
     );
   }
